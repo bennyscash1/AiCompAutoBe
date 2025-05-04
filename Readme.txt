@@ -9,7 +9,7 @@ to run browser>:
 allure serve allure-results 
 
 Run via command line
-
+dotnet test --filter "Category=MobileAndroid&Category=Level_1"
 
 
 Mobile:
