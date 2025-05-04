@@ -13,7 +13,7 @@ using ComprehensivePlayrightAuto.MobileTest.InitalMobile.InitialMobileService;
 namespace ComprehensivePlayrightAuto.MobileTest.MobileTest.AiPlay
 {
     [TestFixture, Category(
-        Categories.MobileAndroid),
+        Categories.MobileAiRun),
     Category(TestLevel.Level_1)]
     public class MobileClickUsingAI
     {
