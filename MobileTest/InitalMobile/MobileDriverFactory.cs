@@ -1,0 +1,168 @@
+﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Appium;
+using OpenQA.Selenium.Appium.Android;
+using OpenQA.Selenium.Appium.Enums;
+using OpenQA.Selenium.Remote;
+using ComprehensiveAutomation.Test.Infra.BaseTest;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Diagnostics;
+using Microsoft.Extensions.Options;
+
+namespace ComprehensiveAutomation.MobileTest.Inital
+{
+  
+    public class MobileDriverFactory : Base
+    {
+        public AndroidDriver appiumDriver;
+        public static bool runOnRealDevice = true;
+        public static bool toInstallApp = false;
+        private static string appUrl = "https://github.com/bennyscash1/ComprehensivePlayrightAuto/releases/download/publicCalculator/calculatorUpdated.apk";
+
+        public MobileDriverFactory(
+            string appP = "com.google.android.deskclock", 
+            string appA = "com.android.deskclock.DeskClock")
+        {
+            if (runOnRealDevice)
+            {
+                appiumDriver = InitAppiumDriver(appP, appA, toInstallApp);
+            }
+            else
+            {
+                appiumDriver = InitRemoteAppiumDriver(toInstallApp);
+            }
+        }
+
+        public AndroidDriver InitAppiumDriver(string appP, string appA, 
+            bool toInstallApp, bool retryInstallUiAutomator = true)
+            
+        {
+            try
+            {
+                var appiumOptions = InitAppiumOptions(appP, appA);
+                var uri = new Uri("http://127.0.0.1:4723/wd/hub");
+                var driver = new AndroidDriver(uri, appiumOptions, TimeSpan.FromMinutes(3));
+                return driver;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Appium driver initialization failed: {ex.Message}");
+
+                if (retryInstallUiAutomator)
+                {
+                    UninstallUiAutomator2Packages();
+                    Console.WriteLine("Retrying Appium driver initialization...");
+                    return InitAppiumDriver(appP, appA, toInstallApp, retryInstallUiAutomator: false);
+                }
+
+                throw new Exception("Failed to initialize Appium driver after retrying.", ex);
+            }
+        }
+
+        private AndroidDriver InitRemoteAppiumDriver(bool toInstallApp)
+        {
+            var options = InitApppiumRemoteOptions();
+            var remoteUrl = new Uri($"http://localhost:4723/wd/hub");
+            var driver = new AndroidDriver(remoteUrl, options);
+
+            return driver;
+        }
+        public AppiumOptions InitAppiumOptions(string appPackage, string appActivity)
+        {
+            string deviceUuid = GetDeviceUUID();
+
+            var appiumOptions = new AppiumOptions();
+            appiumOptions.PlatformName = "Android";
+            appiumOptions.DeviceName = deviceUuid;
+            appiumOptions.AutomationName = "UiAutomator2";
+            appiumOptions.AddAdditionalAppiumOption(MobileCapabilityType.Udid, deviceUuid);
+            appiumOptions.AddAdditionalAppiumOption(MobileCapabilityType.NewCommandTimeout, 150000);
+
+            appiumOptions.AddAdditionalAppiumOption("appPackage", appPackage);
+            appiumOptions.AddAdditionalAppiumOption("appActivity", appActivity);
+
+            //Install from download url - or reset app data
+            if (toInstallApp)
+            {
+                appiumOptions.App = appUrl;
+            }
+            //
+            //appiumOptions.AddAdditionalAppiumOption("noReset", false);
+
+
+            return appiumOptions;
+        }
+
+
+        public AppiumOptions InitApppiumRemoteOptions()
+        {
+            string deviceUuid = GetDeviceUUID();
+            var appiumOptions = new AppiumOptions();
+            appiumOptions.PlatformName = "Android";
+            appiumOptions.DeviceName = deviceUuid;
+            appiumOptions.AutomationName = "UiAutomator2";
+
+          //   appiumOptions.App = appUrl;
+            appiumOptions.AddAdditionalAppiumOption("appPackage", "com.google.android.calculator");
+            appiumOptions.AddAdditionalAppiumOption("appActivity", "com.android.calculator2.Calculator");
+            //appiumOptions.AddAdditionalAppiumOption("noReset", false);
+
+            // הוספת האפליקציה מקישור ישיר
+            return appiumOptions;
+        }
+        public string GetDeviceUUID()
+        {
+            // Start a new process for adb command
+            Process process = new Process();
+            process.StartInfo.FileName = "adb";
+            process.StartInfo.Arguments = "get-serialno";
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.CreateNoWindow = true;
+
+            // Start the process and get the output
+            process.Start();
+            string uuid = process.StandardOutput.ReadToEnd().Trim();
+            process.WaitForExit();
+            return uuid;
+        }
+        private void UninstallUiAutomator2Packages()
+        {
+            Console.WriteLine("Uninstalling UiAutomator2 server packages...");
+            RunAdbCommand("uninstall io.appium.uiautomator2.server");
+            RunAdbCommand("uninstall io.appium.uiautomator2.server.test");
+        }
+        private void RunAdbCommand(string args)
+        {
+            try
+            {
+                var process = new Process
+                {
+                    StartInfo = new ProcessStartInfo
+                    {
+                        FileName = "adb",
+                        Arguments = args,
+                        RedirectStandardOutput = true,
+                        UseShellExecute = false,
+                        CreateNoWindow = true
+                    }
+                };
+                process.Start();
+                process.WaitForExit();
+                Console.WriteLine($"ADB Output: {process.StandardOutput.ReadToEnd()}");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error running adb command '{args}': {e.Message}");
+            }
+        }
+        public void Dispose()
+        {
+            appiumDriver.Quit();
+        }
+
+    }
+}
