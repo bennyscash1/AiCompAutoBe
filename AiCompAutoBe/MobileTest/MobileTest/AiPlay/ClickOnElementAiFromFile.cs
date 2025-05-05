@@ -10,6 +10,7 @@ using NUnit.Framework;
 using OpenQA.Selenium.DevTools.V117.Runtime;
 using ComprehensivePlayrightAuto.MobileTest.InitalMobile.InitialMobileService;
 using System.Text.Json;
+using AiCompAutoBe.MobileTest.InitalMobile.InitialMobileService;
 
 namespace ComprehensivePlayrightAuto.MobileTest.MobileTest.AiPlay
 {
@@ -23,10 +24,8 @@ namespace ComprehensivePlayrightAuto.MobileTest.MobileTest.AiPlay
         [SetUp]
         public async Task SetupMobileDevice()
         {
-            MobileEmulatorMenegar mobileDevicesMenegar = new MobileEmulatorMenegar();
-            deviceId = mobileDevicesMenegar.EnsureDeviceIsRunning("Pixel_2_API_35");
-            AppiumMenegar appiumMenegar = new AppiumMenegar();
-            await appiumMenegar.RunAppiumServer();
+            deviceId = await new PreparingDeviceToRun()
+                .PrepareTheDeviceToReadyForRun(runingApp);
         }
         [Test]
         public async Task _ClickOnElementAiFromFile()

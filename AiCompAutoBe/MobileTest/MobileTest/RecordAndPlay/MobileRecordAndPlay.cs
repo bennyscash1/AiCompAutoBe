@@ -1,4 +1,5 @@
-﻿using ComprehensiveAutomation.MobileTest.Inital;
+﻿using AiCompAutoBe.MobileTest.InitalMobile.InitialMobileService;
+using ComprehensiveAutomation.MobileTest.Inital;
 using ComprehensiveAutomation.Test.UiTest.MobileTest.MobileFlows;
 using ComprehensivePlayrightAuto.MobileTest.InitalMobile.InitialMobileService;
 using ComprehensivePlayrightAuto.MobileTest.MobileServices.RecordLocators;
@@ -23,12 +24,8 @@ namespace ComprehensivePlayrightAuto.MobileTest.MobileTest.RecordAndPlay
         [SetUp]
         public async Task SetupMobileRecodr()
         {
-            MobileEmulatorMenegar mobileDevicesMenegar = new MobileEmulatorMenegar();
-            deviceId = mobileDevicesMenegar.EnsureDeviceIsRunning("Pixel_2_API_35");
-            AppiumMenegar appiumMenegar = new AppiumMenegar();
-            await appiumMenegar.RunAppiumServer();
-
-
+            deviceId = await new PreparingDeviceToRun()
+                .PrepareTheDeviceToReadyForRun(runingApp);
         }
         [Test]
         public async Task _MobileRecordAndPlay()

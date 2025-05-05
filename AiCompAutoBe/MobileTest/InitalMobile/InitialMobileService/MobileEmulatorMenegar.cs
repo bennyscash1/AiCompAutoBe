@@ -126,7 +126,7 @@ namespace ComprehensivePlayrightAuto.MobileTest.InitalMobile.InitialMobileServic
                 if (!IsAnyDeviceConnected())
                 {
                     Console.WriteLine("No devices found. Starting emulator...");
-
+                    //This is the locator for the emulator path - need to add it to cloud
                     string emulatorPath = "C:\\Bennys\\Developing\\MobileServices\\emulator";
                     string emulatorExe = "C:\\Bennys\\Developing\\MobileServices\\emulator\\emulator.exe";
 
@@ -192,6 +192,7 @@ namespace ComprehensivePlayrightAuto.MobileTest.InitalMobile.InitialMobileServic
                         CreateNoWindow = true
                     }
                 };
+
 
                 process.Start();
                 string output = process.StandardOutput.ReadToEnd();
