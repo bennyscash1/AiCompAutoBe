@@ -33,12 +33,10 @@ namespace ComprehensivePlayrightAuto.MobileTest.MobileTest.AiPlay
             MobileBaseFlow mobileFlow = new MobileBaseFlow(mobileDriver.appiumDriver);
 
             //Click on app buttons
-            await mobileFlow.TalkWithApp("Click on number 5");
-            await mobileFlow.TalkWithApp("Plus button");
+            await mobileFlow.TalkWithApp("תלחץ על כפתור נקודה");
+            await mobileFlow.TalkWithApp("Click on AC button");
             await mobileFlow.TalkWithApp("Click on number 8");
             await mobileFlow.TalkWithApp("Click on =");
-
-
         }
 
 

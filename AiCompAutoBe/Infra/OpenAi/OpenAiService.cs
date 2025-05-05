@@ -1,12 +1,15 @@
 ﻿using Newtonsoft.Json;
 using OpenAI.Chat;
+using System.Text;
+using System.Text.Json;
 
 namespace SafeCash.Test.ApiTest.Integration.OpenAi
 {
     public class OpenAiService
     {
         public static string openAiModel = "gpt-4o-mini";
-        public enum AiRequestType
+        #region SystemPrompt
+        public enum SystemPromptTypeEnum
         {
             ApiRequest,
             MobileTextInpueRequest,
@@ -75,11 +78,32 @@ namespace SafeCash.Test.ApiTest.Integration.OpenAi
             " - Y must be >= top and < bottom.\n   " +
             "- No partial matches are allowed.\n   " +
             "- Ignore elements where X and Y are not fully contained inside bounds.\n";
+        public string GetSystemPrompt(SystemPromptTypeEnum aiRequest)
+        {
+            string prePrompt;
+            switch (aiRequest)
+            {
+                case SystemPromptTypeEnum.MobileTextInpueRequest:
+                    prePrompt = mobilePrePrompt;
+                    break;
+                case SystemPromptTypeEnum.MobileXyCordinateRequest:
+                    prePrompt = mobilePrePromptCordinateXy;
+                    break;
 
-        public async Task<string> OpenAiServiceRequest(string userPrompts, AiRequestType aiRequest)
+                default:
+                    prePrompt = "You are an AI assistant."; // Default fallback
+                    break;
+            }
+            return prePrompt;
+        }
+        #endregion
+
+        #region OpenAiServiceRequest
+
+        public async Task<string> OpenAiServiceRequest(string userPrompts, SystemPromptTypeEnum systemPrompt)
         {
             string model = openAiModel;
-            string prePrompt = GetStockPrePromptPrompts(aiRequest);
+            string prePrompt = GetSystemPrompt(systemPrompt);
 
             string apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY") ?? throw new InvalidOperationException("API key is missing from environment variables.");
             string apiResponce = "An error occurred or no response was returned.";
@@ -122,31 +146,103 @@ namespace SafeCash.Test.ApiTest.Integration.OpenAi
             return apiResponce;
         }
 
-        public string GetStockPrePromptPrompts(AiRequestType aiRequest)
+        #endregion
+
+        #region Grok ai request
+        public async Task<string> GrokRequestService(string userMessage, SystemPromptTypeEnum aiRequest)
         {
-            string prePrompt;
-            switch (aiRequest)
+            string grokUrl = "https://api.x.ai/v1/chat/completions";
+            string apiGrokKey = Environment.GetEnvironmentVariable("GROK_API_KEY") ?? throw new InvalidOperationException("API key is missing from environment variables.");
+
+            using (HttpClient client = new HttpClient())
             {
+                string aiPrePromptType = GetSystemPrompt(aiRequest);
 
-                case AiRequestType.MobileTextInpueRequest:
-                    prePrompt = mobilePrePrompt;
-                    break;
-                case AiRequestType.MobileXyCordinateRequest:
-                    prePrompt = mobilePrePromptCordinateXy;
-                    break;
-                /*                case AiPrePromptType.DataBaseAnalyst:
-                                    prePrompt = DataBaseAnalyst;
-                                    break;
-                                case AiPrePromptType.GetStockCompanysPrompts:
-                                    prePrompt = GetStockCompanysPrompts;
-                                    break;*/
-                default:
-                    prePrompt = "You are an AI assistant."; // Default fallback
-                    break;
+                client.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiGrokKey}");
+
+                var requestBody = new
+                {
+                    messages = new[]
+                    {
+                new { role = "system", content = aiPrePromptType },
+                new { role = "user", content = userMessage }
+                },
+                    model = "grok-3-mini-fast-latest",
+                    stream = false,
+                    temperature = 0
+                };
+
+                var jsonContent = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await client.PostAsync(grokUrl, jsonContent);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonResponse = await response.Content.ReadAsStringAsync();
+
+                    // ✅ Extract only the "content" field from the response
+                    using JsonDocument doc = JsonDocument.Parse(jsonResponse);
+
+                    if (doc.RootElement.TryGetProperty("choices", out JsonElement choicesArray) &&
+                        choicesArray.GetArrayLength() > 0 &&
+                        choicesArray[0].TryGetProperty("message", out JsonElement message) &&
+                        message.TryGetProperty("content", out JsonElement contentElement))
+                    {
+                        return contentElement.GetString() ?? "No content available.";
+                    }
+
+                    return "Invalid response format.";
+                }
+                else
+                {
+                    return $"Error: {response.StatusCode} - {response.ReasonPhrase}";
+                }
             }
-            return prePrompt;
         }
+        #endregion
 
+        #region Deep seek ai request
+        private readonly HttpClient _httpClient = new HttpClient();
 
+        public async Task<string> DeepSeekResponceAi(string userPrompts, SystemPromptTypeEnum aiRequest)
+        {
+            string apiUrl = "https://api.deepseek.com/chat/completions"; // Replace with actual API URL
+            string bearerToken = "sk-5706d7050b8c4bddb967ba236538d89d"; // Replace with actual token
+            string prePrompt = GetSystemPrompt(aiRequest);
+            var requestBody = new
+            {
+                model = "deepseek-chat",
+                messages = new[]
+                {
+                new { role = "system", content = prePrompt },
+                new { role = "user", content = userPrompts }
+            },
+                stream = false
+            };
+
+            string jsonRequest = System.Text.Json.JsonSerializer.Serialize(requestBody);
+            var content = new StringContent(jsonRequest, Encoding.UTF8, "application/json"); // ✅ "Content-Type" set correctly here
+
+            var request = new HttpRequestMessage(HttpMethod.Post, apiUrl)
+            {
+                Content = content
+            };
+
+            request.Headers.Add("Authorization", $"Bearer {bearerToken}"); // ✅ Correct place for Authorization
+                                                                           // No need to add "Content-Type" again here
+
+            HttpResponseMessage response = await _httpClient.SendAsync(request);
+            string jsonResponse = await response.Content.ReadAsStringAsync();
+
+            using JsonDocument doc = JsonDocument.Parse(jsonResponse);
+
+            string? contentResponce = doc.RootElement
+                .GetProperty("choices")[0]
+                .GetProperty("message")
+                .GetProperty("content")
+                .GetString();
+
+            return contentResponce;
+        }
+        #endregion
     }
 }

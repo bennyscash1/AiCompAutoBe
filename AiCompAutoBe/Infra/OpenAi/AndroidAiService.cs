@@ -11,14 +11,14 @@ namespace SafeCash.Test.ApiTest.InternalApiTest.Buyer
              string fullPageSource, string userInputView)
         {          
             OpenAiService openAiService = new OpenAiService();
-            string responceLocatorFromAi = await openAiService.OpenAiServiceRequest(
+            string responceLocatorFromAi = await openAiService.GrokRequestService(
                 $"Here is the full app XML source:," +
                 $"{fullPageSource}\n\n" +
                 $" I need to find the XPath locator for the button or input field for the next line>>: '\n"+
                 $"{userInputView}'\n\n"+
                 $"Please return only xpath without any other text",
-                OpenAiService.AiRequestType.MobileTextInpueRequest);
-            bool isLocatorValid = IsLocatorIsVald(responceLocatorFromAi);
+                OpenAiService.SystemPromptTypeEnum.MobileTextInpueRequest);
+           bool isLocatorValid = IsLocatorIsVald(responceLocatorFromAi);
             if (isLocatorValid)
             {
                 return responceLocatorFromAi;
@@ -40,7 +40,7 @@ namespace SafeCash.Test.ApiTest.InternalApiTest.Buyer
                 $" I need to find the XPath locator for the button or input field according to the X and Y cordinate>>: '\n" +
                 $"the X cordinate:{x}', the Y cordinate: {y}\n\n" +
                 $"Please return only xpath without any other text",
-                OpenAiService.AiRequestType.MobileXyCordinateRequest);
+                OpenAiService.SystemPromptTypeEnum.MobileXyCordinateRequest);
             bool isLocatorValid = IsLocatorIsVald(responceLocatorFromAi);
             if (isLocatorValid)
             {
@@ -84,7 +84,7 @@ namespace SafeCash.Test.ApiTest.InternalApiTest.Buyer
             string responseOpenAi = await openAiService.OpenAiServiceRequest(
                 $"image 1: {expectedImagePath} " +
                 $"image 2: {actualImagePath} " ,
-                OpenAiService.AiRequestType.ImagesCompare);
+                OpenAiService.SystemPromptTypeEnum.ImagesCompare);
 
             if (responseOpenAi.Contains("true", StringComparison.OrdinalIgnoreCase))
             {
