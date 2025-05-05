@@ -9,13 +9,14 @@ using static ComprehensiveAutomation.Test.Infra.BaseTest.EnumList;
 using NUnit.Framework;
 using OpenQA.Selenium.DevTools.V117.Runtime;
 using ComprehensivePlayrightAuto.MobileTest.InitalMobile.InitialMobileService;
+using System.Text.Json;
 
 namespace ComprehensivePlayrightAuto.MobileTest.MobileTest.AiPlay
 {
     [TestFixture, Category(
         Categories.MobileAiRun),
     Category(TestLevel.Level_1)]
-    public class MobileClickUsingAI
+    public class ClickOnElementAiFromFile
     {
         static string runingApp = "Calculator";
 
@@ -28,18 +29,30 @@ namespace ComprehensivePlayrightAuto.MobileTest.MobileTest.AiPlay
             await appiumMenegar.RunAppiumServer();
         }
         [Test]
-        public async Task _MobileClickUsingAI()
+        public async Task _ClickOnElementAiFromFile()
         {
             MobileAiDriverFactory mobileDriver = new MobileAiDriverFactory(runingApp);
             MobileBaseFlow mobileFlow = new MobileBaseFlow(mobileDriver.appiumDriver);
 
-            //Click on app buttons
-            await mobileFlow.TalkWithApp("Click on number 5");
-            await mobileFlow.TalkWithApp("Plus button");
-            await mobileFlow.TalkWithApp("Click on number 8");
-            await mobileFlow.TalkWithApp("Click on =");
+            #region Run the step from file
+            var stepsFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "step_input.json");
+            if (File.Exists(stepsFilePath))
+            {
+                var stepJson = File.ReadAllText(stepsFilePath);
+                var steps = JsonSerializer.Deserialize<List<string>>(stepJson);
 
-
+                foreach (var step in steps)
+                {
+                    await mobileFlow.TalkWithApp(step);
+                    Console.WriteLine($"Executing step: {step}");
+                    // Run custom logic per step
+                }
+            }
+            else
+            {
+                Console.WriteLine( "THe run file not found or the step is empty");
+            }
+            #endregion
         }
 
 

@@ -10,9 +10,18 @@ namespace AiApiCompAuto.Controllers
         [HttpPost("run")]
         public IActionResult RunTestCase([FromBody] RunTestCaseName request)
         {
+            #region Get the solution directory file
             string solutionDir = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName;
-            string targetPath = Path.Combine(solutionDir, "AiComprehensiveAuto", "AiCompAutoBe");
+            string targetPath = Path.Combine(solutionDir, "MainAiComprehensiveAuto", "AiCompAutoBe");
+            #endregion
 
+            #region Get path of the step test if it exists
+            if (request.StepTest != null && request.StepTest.Any())
+            {
+                string stepFilePath = Path.Combine(targetPath, "step_input.json");
+                System.IO.File.WriteAllText(stepFilePath, System.Text.Json.JsonSerializer.Serialize(request.StepTest));
+            }
+            #endregion
             #region This run the test case by name
             var processInfo = new ProcessStartInfo
             {
@@ -24,6 +33,7 @@ namespace AiApiCompAuto.Controllers
                 UseShellExecute = false,
                 CreateNoWindow = true
             };
+
             #endregion
             var process = new Process
             {
@@ -31,10 +41,10 @@ namespace AiApiCompAuto.Controllers
             };
 
             process.Start();
+            process.WaitForExit(); 
 
             string output = process.StandardOutput.ReadToEnd();
             string error = process.StandardError.ReadToEnd();
-            process.WaitForExit();
 
             return Ok(new
             {
@@ -47,6 +57,7 @@ namespace AiApiCompAuto.Controllers
         public class RunTestCaseName
         {
             public string TestCaseName { get; set; }
+            public List<string>? StepTest { get; set; } // optional
         }
     }
 }

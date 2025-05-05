@@ -13,7 +13,7 @@ namespace AiApiCompAuto.Controllers
 
             #region company branch file detials
             string solutionDir = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName;
-            string targetPath = Path.Combine(solutionDir, "AiComprehensiveAuto", "AiCompAutoBe");
+            string targetPath = Path.Combine(solutionDir, "MainAiComprehensiveAuto", "AiCompAutoBe");
 
             #endregion
             #region This run the test suit by category name
