@@ -20,16 +20,12 @@ namespace ComprehensivePlayrightAuto.MobileTest.MobileTest.AiPlay
     public class ClickOnElementAiFromFile
     {
         static string runingApp = "Calculator";
-        public string deviceId = string.Empty;
-        [SetUp]
-        public async Task SetupMobileDevice()
-        {
-            deviceId = await new InitialDeviceServices()
-                .PrepareTheDeviceToReadyForRun(runingApp);
-        }
         [Test]
         public async Task _ClickOnElementAiFromFile()
         {
+            string deviceId = await new InitialDeviceServices()
+                .PrepareTheDeviceToReadyForRun(runingApp);
+
             MobileAiDriverFactory mobileDriver = new MobileAiDriverFactory(deviceId, runingApp);
             MobileBaseFlow mobileFlow = new MobileBaseFlow(mobileDriver.appiumDriver);
 

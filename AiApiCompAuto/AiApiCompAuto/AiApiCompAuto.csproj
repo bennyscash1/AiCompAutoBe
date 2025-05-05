@@ -10,4 +10,8 @@
     <PackageReference Include="CliWrap" Version="3.8.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\AiCompAutoBe\AiCompAutoBe.csproj" />
+  </ItemGroup>
+
 </Project>

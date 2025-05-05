@@ -9,6 +9,7 @@ using static ComprehensiveAutomation.Test.Infra.BaseTest.EnumList;
 using NUnit.Framework;
 using OpenQA.Selenium.DevTools.V117.Runtime;
 using ComprehensivePlayrightAuto.MobileTest.InitalMobile.InitialMobileService;
+using System.Text.Json;
 using AiCompAutoBe.MobileTest.InitalMobile.InitialMobileService;
 
 namespace ComprehensivePlayrightAuto.MobileTest.MobileTest.AiPlay
@@ -16,25 +17,31 @@ namespace ComprehensivePlayrightAuto.MobileTest.MobileTest.AiPlay
     [TestFixture, Category(
         Categories.MobileAiRun),
     Category(TestLevel.Level_1)]
-    public class MobileClickUsingAI
+    public class ClickElementsFromApi
     {
-        static string appRuningName = "Calculator";
-        public string deviceId = string.Empty;
-
         [Test]
-        public async Task _MobileClickUsingAI()
+        public async Task _ClickElementsFromApi(string runingApp, List<string> steps)
         {
-            deviceId = await new InitialDeviceServices()
-             .PrepareTheDeviceToReadyForRun(appRuningName);
+            string deviceId = await new InitialDeviceServices()
+                .PrepareTheDeviceToReadyForRun(runingApp);
 
-            MobileAiDriverFactory mobileDriver = new MobileAiDriverFactory(deviceId, appRuningName);
+            MobileAiDriverFactory mobileDriver = new MobileAiDriverFactory(deviceId, runingApp);
             MobileBaseFlow mobileFlow = new MobileBaseFlow(mobileDriver.appiumDriver);
 
-            //Click on app buttons
-            await mobileFlow.TalkWithApp("Click on number 6");
-            await mobileFlow.TalkWithApp("Click on + button");
-            await mobileFlow.TalkWithApp("Click on number 8");
-            await mobileFlow.TalkWithApp("Click on =");
+            #region Run the step from api request
+            if (steps != null && steps.Any())
+            {
+                foreach (var step in steps)
+                {
+                    await mobileFlow.TalkWithApp(step);
+                    Console.WriteLine($"Executing step: {step}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("No steps provided.");
+            }
+            #endregion
         }
 
 
