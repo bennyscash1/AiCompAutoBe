@@ -1,4 +1,6 @@
-﻿using ComprehensiveAutomation.MobileTest.Inital;
+﻿using CliWrap;
+using CliWrap.Buffered;
+using ComprehensiveAutomation.MobileTest.Inital;
 using ComprehensivePlayrightAuto.MobileTest.InitalMobile.InitialMobileService;
 using System;
 using System.Collections.Generic;
@@ -8,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace AiCompAutoBe.MobileTest.InitalMobile.InitialMobileService
 {
-    public class PreparingDeviceToRun
+    public class InitialDeviceServices
     {
         public async Task <string>PrepareTheDeviceToReadyForRun(string runingApp, 
             string deviceName ="")
@@ -21,6 +23,14 @@ namespace AiCompAutoBe.MobileTest.InitalMobile.InitialMobileService
 
             return deviceId;
         }
-    
+        public async Task<string> RunCliCommand(string command, string type = "adb")
+        {
+            var result = await Cli.Wrap(type)
+                .WithArguments(command)
+                .ExecuteBufferedAsync();
+
+            return result.StandardOutput;
+        }
+
     }
 }

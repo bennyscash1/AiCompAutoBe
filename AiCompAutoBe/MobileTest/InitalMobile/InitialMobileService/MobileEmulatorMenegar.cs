@@ -1,4 +1,6 @@
-﻿using ComprehensiveAutomation.MobileTest.Inital;
+﻿using CliWrap;
+using CliWrap.Buffered;
+using ComprehensiveAutomation.MobileTest.Inital;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -193,7 +195,6 @@ namespace ComprehensivePlayrightAuto.MobileTest.InitalMobile.InitialMobileServic
                     }
                 };
 
-
                 process.Start();
                 string output = process.StandardOutput.ReadToEnd();
                 process.WaitForExit();
@@ -262,6 +263,7 @@ namespace ComprehensivePlayrightAuto.MobileTest.InitalMobile.InitialMobileServic
             }
         }
         #endregion
+    
 
     }
 }

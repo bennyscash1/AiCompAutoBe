@@ -24,7 +24,7 @@ namespace ComprehensivePlayrightAuto.MobileTest.MobileTest.RecordAndPlay
         [SetUp]
         public async Task SetupMobileRecodr()
         {
-            deviceId = await new PreparingDeviceToRun()
+            deviceId = await new InitialDeviceServices()
                 .PrepareTheDeviceToReadyForRun(runingApp);
         }
         [Test]

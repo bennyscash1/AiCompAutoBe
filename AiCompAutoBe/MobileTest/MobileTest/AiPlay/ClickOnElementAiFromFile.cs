@@ -24,7 +24,7 @@ namespace ComprehensivePlayrightAuto.MobileTest.MobileTest.AiPlay
         [SetUp]
         public async Task SetupMobileDevice()
         {
-            deviceId = await new PreparingDeviceToRun()
+            deviceId = await new InitialDeviceServices()
                 .PrepareTheDeviceToReadyForRun(runingApp);
         }
         [Test]

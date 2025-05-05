@@ -6,4 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="CliWrap" Version="3.8.2" />
+  </ItemGroup>
+
 </Project>
