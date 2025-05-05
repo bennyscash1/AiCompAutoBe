@@ -117,7 +117,7 @@ namespace ComprehensivePlayrightAuto.MobileTest.InitalMobile.InitialMobileServic
         #endregion
 
         #region Run the emulator and make sure it ready to use
-        public void EnsureEmulatorRunning(string emulatorName = "Small_Phone_API_35")
+        public string  EnsureDeviceIsRunning(string emulatorName = "Small_Phone_API_35")
         {
             if (!IsAnyDeviceConnected())
             {
@@ -159,6 +159,7 @@ namespace ComprehensivePlayrightAuto.MobileTest.InitalMobile.InitialMobileServic
             Console.WriteLine("Device is connected via ADB.");
 
             // ✅ Wait for device to finish booting
+            
             string deviceId = GetFirstConnectedDeviceId();
             int bootCheckRetries = 0;
             while (!IsDeviceBootCompleted(deviceId) && bootCheckRetries++ < 60)
@@ -169,10 +170,9 @@ namespace ComprehensivePlayrightAuto.MobileTest.InitalMobile.InitialMobileServic
 
             if (!IsDeviceBootCompleted(deviceId))
                 throw new Exception("Device did not finish booting in time.");
-
             Console.WriteLine("Device is ready for use.");
+            return deviceId;
         }
-
         #endregion
 
         #region Get app opened name 

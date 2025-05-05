@@ -19,12 +19,12 @@ namespace ComprehensivePlayrightAuto.MobileTest.MobileTest.RecordAndPlay
     public class MobileRecordAndPlay
     {
         static string runingApp = "Calculator";
-
+        public string deviceId = string.Empty;
         [SetUp]
         public async Task SetupMobileRecodr()
         {
             MobileEmulatorMenegar mobileDevicesMenegar = new MobileEmulatorMenegar();
-            mobileDevicesMenegar.EnsureEmulatorRunning("Pixel_2_API_35");
+            deviceId = mobileDevicesMenegar.EnsureDeviceIsRunning("Pixel_2_API_35");
             AppiumMenegar appiumMenegar = new AppiumMenegar();
             await appiumMenegar.RunAppiumServer();
 
@@ -34,7 +34,7 @@ namespace ComprehensivePlayrightAuto.MobileTest.MobileTest.RecordAndPlay
         public async Task _MobileRecordAndPlay()
         {
             #region Open recording session
-            MobileAiDriverFactory mobileRecordDriver = new MobileAiDriverFactory(runingApp);
+            MobileAiDriverFactory mobileRecordDriver = new MobileAiDriverFactory(deviceId, runingApp);
             MobileBaseFlow mobileRecordFlow = new MobileBaseFlow(mobileRecordDriver.appiumDriver);
             #endregion
 
@@ -49,7 +49,7 @@ namespace ComprehensivePlayrightAuto.MobileTest.MobileTest.RecordAndPlay
             #endregion
 
             #region Get touch coordinates
-            MobileAiDriverFactory mobileRecordDriverx = new MobileAiDriverFactory(runingApp);
+            MobileAiDriverFactory mobileRecordDriverx = new MobileAiDriverFactory(deviceId, runingApp);
             MobileBaseFlow mobileRecordFlowx = new MobileBaseFlow(mobileRecordDriverx.appiumDriver);
 
             await mobileRecordFlowx.ClickOnXyUsingFile(recordFile);

@@ -26,21 +26,21 @@ namespace ComprehensiveAutomation.MobileTest.Inital
         public static string baseAppiumUrl = $"http://127.0.0.1:{appiumPort}";
         public static string apiumUrlWithWd = "http://127.0.0.1:4718/wd/hub";
         private static string appUrl = "https://github.com/bennyscash1/ComprehensivePlayrightAuto/releases/download/publicCalculator/calculatorUpdated.apk";
-
-        public MobileAiDriverFactory(string appName = "")
+        public static string MobileDeviceName = "Pixel_2_API_35";
+        public MobileAiDriverFactory(string deviceId, string appName)
         {
             //Can take the app name from user hard code by next code
-            string allpackageList = GetMobileInstalledApps();
-            string appPackage = GetAppPackageByName(appName);
+            string allpackageList = GetMobileInstalledApps(deviceId);
+            string appPackage = GetAppPackageByName(deviceId, appName);
             bool isAppListHaseAppPackage = IsAppPackageInTheMobileList(
                 allpackageList, appPackage);
            Assert.That(isAppListHaseAppPackage,$"The app '{appName}' not found on the mobile app, the app package return {appPackage}");         
-            string appActivity = GetAppMainActivity(appPackage);
+            string appActivity = GetAppMainActivity(deviceId, appPackage);
            Assert.That(!string.IsNullOrEmpty(appActivity), $"The app activity for '{appName}' not found on the mobile app, the app package return {appPackage}");
-            appiumDriver = InitAppiumDriver(appPackage, appActivity);
+           appiumDriver = InitAppiumDriver(appPackage, appActivity);
 
             //Or can take the app name from user> get the mobile brand and send it to ai 
-        }
+       }
         private int retryCount = 0;
         private const int maxRetries = 4;
         public AndroidDriver InitAppiumDriver(string appP = "", string appA = "")
@@ -155,7 +155,7 @@ namespace ComprehensiveAutomation.MobileTest.Inital
         }
 
 
-        public string GetMobileInstalledApps()
+        public string GetMobileInstalledApps(string deviceId)
         {
             try
             {
@@ -164,7 +164,7 @@ namespace ComprehensiveAutomation.MobileTest.Inital
                     StartInfo = new ProcessStartInfo
                     {
                         FileName = "adb",
-                        Arguments = "shell pm list packages",
+                        Arguments = $"-s {deviceId} shell pm list packages",
                         RedirectStandardOutput = true,
                         UseShellExecute = false,
                         CreateNoWindow = true
@@ -189,14 +189,14 @@ namespace ComprehensiveAutomation.MobileTest.Inital
         }
 
         #region Get app package and app activity
-        public string GetAppPackageByName(string appName)
+        public string GetAppPackageByName(string deviceId, string appName)
         {
             var process = new System.Diagnostics.Process
             {
                 StartInfo = new System.Diagnostics.ProcessStartInfo
                 {
                     FileName = "adb",
-                    Arguments = "shell pm list packages",
+                    Arguments = $"-s {deviceId} shell pm list packages",
                     RedirectStandardOutput = true,
                     UseShellExecute = false,
                     CreateNoWindow = true
@@ -225,14 +225,14 @@ namespace ComprehensiveAutomation.MobileTest.Inital
             return smartMatch;
         }
 
-        public string GetAppMainActivity(string appPackage)
+        public string GetAppMainActivity(string deviceId, string appPackage)
         {
             var process = new System.Diagnostics.Process
             {
                 StartInfo = new System.Diagnostics.ProcessStartInfo
                 {
                     FileName = "adb",
-                    Arguments = $"shell cmd package resolve-activity --brief {appPackage}",
+                    Arguments = $"-s {deviceId} shell cmd package resolve-activity --brief {appPackage}",
                     RedirectStandardOutput = true,
                     UseShellExecute = false,
                     CreateNoWindow = true

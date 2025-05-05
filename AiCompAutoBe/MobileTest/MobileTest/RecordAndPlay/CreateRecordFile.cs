@@ -19,12 +19,14 @@ namespace ComprehensivePlayrightAuto.MobileTest.MobileTest.RecordAndPlay
     public class CreateRecordFile
     {
         public static string runingApp = "staging";
-        public static string recordFileName = "ChangeEnviorment";
+        public string deviceId = string.Empty;
+        public static string recordFileName = "recording";
+
         [SetUp]
         public async Task _SetupMobile()
         {
             MobileEmulatorMenegar mobileDevicesMenegar = new MobileEmulatorMenegar();
-            mobileDevicesMenegar.EnsureEmulatorRunning("Pixel_2_API_35");
+            deviceId = mobileDevicesMenegar.EnsureDeviceIsRunning("Pixel_2_API_35");
             AppiumMenegar appiumMenegar = new AppiumMenegar();
             await appiumMenegar.RunAppiumServer();
 
@@ -34,7 +36,7 @@ namespace ComprehensivePlayrightAuto.MobileTest.MobileTest.RecordAndPlay
         public async Task _CreateRecordFile()
         {
             #region Open recording session
-            MobileAiDriverFactory mobileRecordDriver = new MobileAiDriverFactory(runingApp);
+            MobileAiDriverFactory mobileRecordDriver = new MobileAiDriverFactory(deviceId, runingApp);
             MobileBaseFlow mobileRecordFlow = new MobileBaseFlow(mobileRecordDriver.appiumDriver);
             #endregion
 

@@ -18,19 +18,19 @@ namespace ComprehensivePlayrightAuto.MobileTest.MobileTest.AiPlay
     public class MobileClickUsingAI
     {
         static string runingApp = "Calculator";
-
+        public  string deviceId = string.Empty;
         [SetUp]
         public async Task SetupMobileDevice()
         {
             MobileEmulatorMenegar mobileDevicesMenegar = new MobileEmulatorMenegar();
-            mobileDevicesMenegar.EnsureEmulatorRunning("Pixel_2_API_35");
+            deviceId = mobileDevicesMenegar.EnsureDeviceIsRunning(MobileAiDriverFactory.MobileDeviceName);
             AppiumMenegar appiumMenegar = new AppiumMenegar();
             await appiumMenegar.RunAppiumServer();
         }
         [Test]
         public async Task _MobileClickUsingAI()
         {
-            MobileAiDriverFactory mobileDriver = new MobileAiDriverFactory(runingApp);
+            MobileAiDriverFactory mobileDriver = new MobileAiDriverFactory(deviceId, runingApp);
             MobileBaseFlow mobileFlow = new MobileBaseFlow(mobileDriver.appiumDriver);
 
             //Click on app buttons
