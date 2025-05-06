@@ -11,16 +11,18 @@ using OpenQA.Selenium.DevTools.V117.Runtime;
 using ComprehensivePlayrightAuto.MobileTest.InitalMobile.InitialMobileService;
 using System.Text.Json;
 using AiCompAutoBe.MobileTest.InitalMobile.InitialMobileService;
+using AiCompAutoBe.MobileTest.MobileTest.AiPlay.AiRunFromApi;
 
-namespace ComprehensivePlayrightAuto.MobileTest.MobileTest.AiPlay
+namespace AiCompAutoBe.MobileTest.MobileTest.AiPlay.AiRunFromApi
 {
     [TestFixture, Category(
         Categories.MobileAiRun),
     Category(TestLevel.Level_1)]
-    public class ClickElementsFromApi
+    public class InputElementsFromApi
     {
+
         [Test]
-        public async Task _ClickElementsFromApi(string runingApp, List<string> steps)
+        public async Task _InputElementsFromApi(string runingApp, List<StepInstruction> steps)
         {
             string deviceId = await new InitialDeviceServices()
                 .PrepareTheDeviceToReadyForRun(runingApp);
@@ -33,7 +35,7 @@ namespace ComprehensivePlayrightAuto.MobileTest.MobileTest.AiPlay
             {
                 foreach (var step in steps)
                 {
-                    await mobileFlow.TalkWithApp(step);
+                    await mobileFlow.TalkWithApp(step.ElementView, step.InputText);
                     Console.WriteLine($"Executing step: {step}");
                 }
             }

@@ -1,4 +1,5 @@
-﻿using ComprehensivePlayrightAuto.MobileTest.MobileTest.AiPlay;
+﻿using AiCompAutoBe.MobileTest.MobileTest.AiPlay.AiRunFromApi;
+using ComprehensivePlayrightAuto.MobileTest.MobileTest.AiPlay;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -6,7 +7,7 @@ namespace AiApiCompAuto.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ApiStepsController : ControllerBase
+    public class ApiClickStepsController : ControllerBase
     {
         [HttpPost("run")]
         public async Task<IActionResult> RunApiSteps([FromBody] RunTestCaseName request)
