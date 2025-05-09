@@ -12,6 +12,7 @@ using ComprehensivePlayrightAuto.MobileTest.InitalMobile.InitialMobileService;
 using System.Text.Json;
 using AiCompAutoBe.MobileTest.InitalMobile.InitialMobileService;
 using AiCompAutoBe.MobileTest.MobileTest.AiPlay.AiRunFromApi;
+using static ComprehensivePlayrightAuto.MobileTest.InitalMobile.InitialMobileService.MobileEmulatorMenegar;
 
 namespace AiCompAutoBe.MobileTest.MobileTest.AiPlay.AiRunFromApi
 {
@@ -25,7 +26,8 @@ namespace AiCompAutoBe.MobileTest.MobileTest.AiPlay.AiRunFromApi
         public async Task _InputElementsFromApi(string runingApp, List<StepInstruction> steps)
         {
             string deviceId = await new InitialDeviceServices()
-                .PrepareTheDeviceToReadyForRun(runingApp);
+                .PrepareTheDeviceToReadyForRun(runingApp, 
+                EmulatorEnumList.Small_Phone_API_35.ToString());
 
             MobileAiDriverFactory mobileDriver = new MobileAiDriverFactory(deviceId, runingApp);
             MobileBaseFlow mobileFlow = new MobileBaseFlow(mobileDriver.appiumDriver);

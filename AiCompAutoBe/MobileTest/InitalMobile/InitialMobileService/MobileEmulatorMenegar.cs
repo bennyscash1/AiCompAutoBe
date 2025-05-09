@@ -263,7 +263,16 @@ namespace ComprehensivePlayrightAuto.MobileTest.InitalMobile.InitialMobileServic
             }
         }
         #endregion
-    
 
+        public enum EmulatorEnumList
+        {
+            Pixel_2_API_35,
+            Pixel_4_API_35,
+            Pixel_5_API_36,
+            Pixel_API_35,
+            Pixel_API_35_2,
+            Pixel_XL_API_35,
+            Small_Phone_API_35
+        }
     }
 }

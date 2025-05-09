@@ -26,7 +26,6 @@ namespace ComprehensiveAutomation.MobileTest.Inital
         public static string baseAppiumUrl = $"http://127.0.0.1:{appiumPort}";
         public static string apiumUrlWithWd = "http://127.0.0.1:4718/wd/hub";
         private static string appUrl = "https://github.com/bennyscash1/ComprehensivePlayrightAuto/releases/download/publicCalculator/calculatorUpdated.apk";
-        public static string MobileDeviceName = "Pixel_2_API_35";
         public MobileAiDriverFactory(string deviceId, string appName)
         {
             //Can take the app name from user hard code by next code

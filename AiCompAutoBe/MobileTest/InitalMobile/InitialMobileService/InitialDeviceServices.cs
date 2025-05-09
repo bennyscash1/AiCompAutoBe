@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static ComprehensivePlayrightAuto.MobileTest.InitalMobile.InitialMobileService.MobileEmulatorMenegar;
 
 namespace AiCompAutoBe.MobileTest.InitalMobile.InitialMobileService
 {
@@ -15,9 +16,10 @@ namespace AiCompAutoBe.MobileTest.InitalMobile.InitialMobileService
         public async Task <string>PrepareTheDeviceToReadyForRun(string runingApp, 
             string deviceName ="")
         {            
-            deviceName ??= MobileAiDriverFactory.MobileDeviceName;
+            deviceName ??= EmulatorEnumList.Pixel_2_API_35.ToString(); 
             //Run deviece
-            string deviceId = new MobileEmulatorMenegar ().EnsureDeviceIsRunning();
+            string deviceId = new MobileEmulatorMenegar ()
+                .EnsureDeviceIsRunning(deviceName);
             //Run appium
             await new AppiumMenegar().RunAppiumServer();
 
