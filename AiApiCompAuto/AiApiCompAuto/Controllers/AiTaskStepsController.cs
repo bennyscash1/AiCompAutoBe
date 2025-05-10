@@ -6,16 +6,17 @@ namespace AiApiCompAuto.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ApiInputsStepsController : ControllerBase
+    public class AiTaskStepsController : ControllerBase
     {
         [HttpPost("run")]
         public async Task<IActionResult> RunApiSteps([FromBody] TestInputData requestData)
         {
             try
             {
-                var runingService = new InputElementsFromApi();
-                await runingService._InputElementsFromApi(
+                var runingService = new AiTaskAndInputElemnts();
+                await runingService._AiTaskAndInputElemnts(
                     requestData.RuningApp,
+                    requestData.AiTaskRequest,
                     requestData.TestInputSteps);
                 return Ok(new
                 {

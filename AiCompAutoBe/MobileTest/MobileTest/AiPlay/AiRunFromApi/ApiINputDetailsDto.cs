@@ -11,18 +11,12 @@ namespace AiCompAutoBe.MobileTest.MobileTest.AiPlay.AiRunFromApi
     public class TestInputData
     {
         public string RuningApp { get; set; }
-        public List<StepInstruction>? TestInputSteps { get; set; }
+        public List<StepInstruction>? TestInputSteps { get; set; } 
+        public string AiTaskRequest { get; set; }
     }
     public class StepInstruction
     {
         public string ElementView { get; set; }
         public string InputText { get; set; } = "";
     }
-    #region Input details for ai tasks mission
-
-    public class AiTasksApiInputDto
-    {
-        public string AiTaskRequest { get; set; }
-    }
-    #endregion
 }

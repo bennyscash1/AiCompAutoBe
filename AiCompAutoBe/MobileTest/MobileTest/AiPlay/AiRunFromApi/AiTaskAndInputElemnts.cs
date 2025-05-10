@@ -13,25 +13,33 @@ using System.Text.Json;
 using AiCompAutoBe.MobileTest.InitalMobile.InitialMobileService;
 using AiCompAutoBe.MobileTest.MobileTest.AiPlay.AiRunFromApi;
 using static ComprehensivePlayrightAuto.MobileTest.InitalMobile.InitialMobileService.MobileEmulatorMenegar;
+using AiCompAutoBe.MobileTest.MobileFlows;
 
 namespace AiCompAutoBe.MobileTest.MobileTest.AiPlay.AiRunFromApi
 {
     [TestFixture, Category(
         Categories.MobileAiRun),
     Category(TestLevel.Level_1)]
-    public class InputElementsFromApi
+    public class AiTaskAndInputElemnts
     {
 
         [Test]
-        public async Task _InputElementsFromApi(string runingApp, List<StepInstruction> steps)
+        public async Task _AiTaskAndInputElemnts(string runingApp, string aiTask, List<StepInstruction> steps )
         {
             string deviceId = await new InitialDeviceServices()
                 .PrepareTheDeviceToReadyForRun(runingApp, 
                 EmulatorEnumList.Small_Phone_API_35.ToString());
 
             MobileAiDriverFactory mobileDriver = new MobileAiDriverFactory(deviceId, runingApp);
-            MobileBaseFlow mobileFlow = new MobileBaseFlow(mobileDriver.appiumDriver);
+            MobileAiTaskFlow mobileFlow = new MobileAiTaskFlow(mobileDriver.appiumDriver);
 
+            #region Get the ai task 
+            if (!string.IsNullOrEmpty(aiTask))
+            {
+                await mobileFlow.HandleAiTaskMission(aiTask);
+                Console.WriteLine($"Executing AI Task: {aiTask}");
+            }
+            #endregion
             #region Run the step from api request
             if (steps != null && steps.Any())
             {
@@ -41,25 +49,12 @@ namespace AiCompAutoBe.MobileTest.MobileTest.AiPlay.AiRunFromApi
                     Console.WriteLine($"Executing step: {step}");
                 }
             }
+   
             else
             {
                 Console.WriteLine("No steps provided.");
             }
             #endregion
         }
-
-
-
-
-
-        //await mobileLoginFlow.TalkWithYouApp("Click on number 5");
-        //await mobileLoginFlow.TalkWithYouApp("Plus button");
-        //await mobileLoginFlow.TalkWithYouApp("Click on number 8");
-        //await mobileLoginFlow.TalkWithYouApp("Click on =");
-
-        /*        await mobileLoginFlow.TalkWithYouApp("Click on 'use wihtout an account'");
-                await mobileLoginFlow.TalkWithYouApp("More button");
-                await mobileLoginFlow.TalkWithYouApp("Click on 'Got it'");
-                await mobileLoginFlow.TalkWithYouApp("Search input field", "Automatico");*/
     }
 }
