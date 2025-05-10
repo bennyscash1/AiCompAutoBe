@@ -1,7 +1,9 @@
-﻿using OpenQA.Selenium;
+﻿using NUnit.Framework;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.Android;
 using SafeCash.Test.ApiTest.Integration.OpenAi;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 namespace SafeCash.Test.ApiTest.InternalApiTest.Buyer
 {
@@ -18,7 +20,7 @@ namespace SafeCash.Test.ApiTest.InternalApiTest.Buyer
                 $"{userInputView}'\n\n"+
                 $"Please return only xpath without any other text",
                 OpenAiService.SystemPromptTypeEnum.MobileTextInpueRequest);
-           bool isLocatorValid = IsLocatorIsVald(responceLocatorFromAi);
+           bool isLocatorValid = AndroidAiService.isLocatorValid(responceLocatorFromAi);
             if (isLocatorValid)
             {
                 return responceLocatorFromAi;
@@ -41,7 +43,7 @@ namespace SafeCash.Test.ApiTest.InternalApiTest.Buyer
                 $"the X cordinate:{x}', the Y cordinate: {y}\n\n" +
                 $"Please return only xpath without any other text",
                 OpenAiService.SystemPromptTypeEnum.MobileXyCordinateRequest);
-            bool isLocatorValid = IsLocatorIsVald(responceLocatorFromAi);
+            bool isLocatorValid = AndroidAiService.isLocatorValid(responceLocatorFromAi);
             if (isLocatorValid)
             {
                 return responceLocatorFromAi;
@@ -53,7 +55,7 @@ namespace SafeCash.Test.ApiTest.InternalApiTest.Buyer
                 return string.Empty; // or throw an exception, or return a default value
             }
         }
-        public static bool IsLocatorIsVald(string locator)
+        public static bool isLocatorValid(string locator)
         {
             if (string.IsNullOrWhiteSpace(locator))
                 return false;
@@ -95,6 +97,47 @@ namespace SafeCash.Test.ApiTest.InternalApiTest.Buyer
                 return false;
             }
         }
+
+        #region Ai service for tasks 
+        public async Task<string> GetAiResponedAsJson(
+           string fullPageSource, string userEndGoalMission, string userUpdateOnFailedScenario = "")
+        {
+            OpenAiService openAiService = new OpenAiService();
+            string responceLocatorFromAi = await openAiService.GrokRequestService(
+                $"XML:\n{fullPageSource}\n\n" +
+                $"The user Goal:\n" +
+                $"{userEndGoalMission}\n\n" +
+                $"{userUpdateOnFailedScenario}",
+
+                OpenAiService.SystemPromptTypeEnum.MobileSystemPromptMissionTask);
+
+            bool isLocatorValid = isAiReturnValidJson(responceLocatorFromAi);
+            if (isLocatorValid)
+            {
+                return responceLocatorFromAi;
+            }
+            else
+            {
+                Assert.That(isLocatorValid, Is.True,
+                    $"THe ai responed invalid json: {responceLocatorFromAi}");
+                return string.Empty;
+            }
+        }
+        public static bool isAiReturnValidJson(string input)
+        {
+            try
+            {
+                using (JsonDocument.Parse(input))
+                {
+                    return true;
+                }
+            }
+            catch (JsonException)
+            {
+                return false;
+            }
+        }
+        #endregion
 
     }
 }

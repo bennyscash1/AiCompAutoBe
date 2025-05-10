@@ -35,7 +35,7 @@ namespace ComprehensiveAutomation.Test.UiTest.MobileTest.MobileFlows
         public async Task TalkWithApp(string elementView, string inputText ="")
         {
             By? element = await GetAiElementLocator(elementView);
-            Assert.That(element != null, $"The element for view '{elementView}' was not found by AI.");
+            Assert.That(element != null, $"The element for: '{elementView}' was not found by the AI.  ");
 
             if (string.IsNullOrEmpty(inputText))
             {
@@ -49,6 +49,7 @@ namespace ComprehensiveAutomation.Test.UiTest.MobileTest.MobileFlows
         }
 
 
+        #region Get ai element for single element
         private async Task<By?> GetAiElementLocator(string elementView)
         {
             mobileBasePages.WaitForPageToLoad();
@@ -57,23 +58,35 @@ namespace ComprehensiveAutomation.Test.UiTest.MobileTest.MobileFlows
 
             string locator = "";
             int retry = 0;
+            bool isLocatorValid = false;
+            bool isElementExsist = false;
 
-            while (retry < 2)
+            while ((isLocatorValid == false || isElementExsist == false) && retry < 2)
             {
-                locator = await aiService.GetAndroidLocatorFromUserTextInput(fullPageSource, elementView);
-                //Test if the locator valid, of no send it again to the ai
-                if (AndroidAiService.IsLocatorIsVald(locator))
-                    return By.XPath(locator);
+                //Test if the locator is a valid one
+                if (!isLocatorValid)
+                {
+                    locator = await aiService.GetAndroidLocatorFromUserTextInput(fullPageSource, elementView);
+                    isLocatorValid = AndroidAiService.isLocatorValid(locator);
+                }
+                if (isLocatorValid)
+                {
+                    //Test if the locator exsist on the page
+                    isElementExsist = mobileBasePages.IsHavyElementFount(By.XPath(locator));
+                }
                 retry++;
             }
-
+            //Only if the locator is valid and exsist on the page return it
+            if (isLocatorValid && isElementExsist)
+            {
+                return By.XPath(locator);
+            }
             Console.WriteLine($"[AI] Could not resolve a valid locator for '{elementView}'. Last attempt: {locator}");
-            return null;
+            return null; // or `return By.XPath("");` if your system supports empty XPath
         }
         #endregion
 
         #region Click on Xy cordinate
-
         public async Task ClickOnXyUsingFile(string fileCordinatePath)
         {
             RecordLocatoreService recordLocatoreService = new RecordLocatoreService();
@@ -105,7 +118,7 @@ namespace ComprehensiveAutomation.Test.UiTest.MobileTest.MobileFlows
                 locator = await aiService.GetAndroidLocatorFromUserXyCordinate(fullSizeScreen,
                     x, y, screenSize);
                 //Test if the locator valid, of no send it again to the ai
-                if (AndroidAiService.IsLocatorIsVald(locator))
+                if (AndroidAiService.isLocatorValid(locator))
                     return By.XPath(locator);
                 retry++;
             }
@@ -114,6 +127,7 @@ namespace ComprehensiveAutomation.Test.UiTest.MobileTest.MobileFlows
                 $" Last attempt: {locator}");
             return null;
         }
+        #endregion
         #endregion
 
     }
