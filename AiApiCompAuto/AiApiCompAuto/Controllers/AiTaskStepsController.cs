@@ -16,7 +16,7 @@ namespace AiApiCompAuto.Controllers
                 var runingService = new AiTaskAndInputElemnts();
                 await runingService._AiTaskAndInputElemnts(
                     requestData.RuningApp,
-                    requestData.AiTaskRequest,
+                    requestData.AiTasksList,
                     requestData.TestInputSteps);
                 return Ok(new
                 {

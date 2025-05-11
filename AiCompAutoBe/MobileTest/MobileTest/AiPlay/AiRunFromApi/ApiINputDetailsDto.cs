@@ -11,12 +11,17 @@ namespace AiCompAutoBe.MobileTest.MobileTest.AiPlay.AiRunFromApi
     public class TestInputData
     {
         public string RuningApp { get; set; }
-        public List<StepInstruction>? TestInputSteps { get; set; } 
-        public string AiTaskRequest { get; set; }
+        public List<AiTasksList>? AiTasksList { get; set; }
+
+        public List<StepInstruction>? TestInputSteps { get; set; }
     }
     public class StepInstruction
     {
         public string ElementView { get; set; }
         public string InputText { get; set; } = "";
+    }
+    public class AiTasksList
+    {
+        public string TaskStep { get; set; }
     }
 }

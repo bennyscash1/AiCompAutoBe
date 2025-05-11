@@ -24,7 +24,7 @@ namespace AiCompAutoBe.MobileTest.MobileTest.AiPlay.AiRunFromApi
     {
 
         [Test]
-        public async Task _AiTaskAndInputElemnts(string runingApp, string aiTask, List<StepInstruction> steps )
+        public async Task _AiTaskAndInputElemnts(string runingApp, List<AiTasksList>taskSteps, List<StepInstruction> steps )
         {
             string deviceId = await new InitialDeviceServices()
                 .PrepareTheDeviceToReadyForRun(runingApp, 
@@ -34,10 +34,13 @@ namespace AiCompAutoBe.MobileTest.MobileTest.AiPlay.AiRunFromApi
             MobileAiTaskFlow mobileFlow = new MobileAiTaskFlow(mobileDriver.appiumDriver);
 
             #region Get the ai task 
-            if (!string.IsNullOrEmpty(aiTask))
+            if (taskSteps != null && taskSteps.Any())
             {
-                await mobileFlow.HandleAiTaskMission(aiTask);
-                Console.WriteLine($"Executing AI Task: {aiTask}");
+                foreach (var taskStep in taskSteps)
+                {
+                    await mobileFlow.HandleAiTaskMission(taskStep.TaskStep);
+                    Console.WriteLine($"Executing task step: {taskStep}");
+                }
             }
             #endregion
             #region Run the step from api request
@@ -46,7 +49,7 @@ namespace AiCompAutoBe.MobileTest.MobileTest.AiPlay.AiRunFromApi
                 foreach (var step in steps)
                 {
                     await mobileFlow.TalkWithApp(step.ElementView, step.InputText);
-                    Console.WriteLine($"Executing step: {step}");
+                    Console.WriteLine($"Executing click step: {step}");
                 }
             }
    
