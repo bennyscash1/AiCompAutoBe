@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AiCompAutoBe.MobileTest.MobileTest.AiPlay.AiRunFromApi
+namespace AiCompAutoBe.MobileTest.MobileTest.AiPlay.AiRunFromApi.RunAiFromApi
 {
 
 
@@ -23,5 +23,11 @@ namespace AiCompAutoBe.MobileTest.MobileTest.AiPlay.AiRunFromApi
     public class AiTasksList
     {
         public string TaskStep { get; set; }
+    }
+
+    public class CreateFileInputDto
+    {
+        public string RuningApp { get; set; }
+        public string RecordFileName { get; set; }
     }
 }

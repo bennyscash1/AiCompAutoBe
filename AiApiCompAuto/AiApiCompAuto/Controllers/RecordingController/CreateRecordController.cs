@@ -1,4 +1,5 @@
-﻿using AiCompAutoBe.MobileTest.MobileTest.AiPlay.AiRunFromApi.RunAiFromApi;
+﻿using AiCompAutoBe.MobileTest.MobileTest.AiPlay.AiRunFromApi.RecordingApi;
+using AiCompAutoBe.MobileTest.MobileTest.AiPlay.AiRunFromApi.RunAiFromApi;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -6,22 +7,21 @@ namespace AiApiCompAuto.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AiTaskStepsController : ControllerBase
+    public class CreateRecordController : ControllerBase
     {
         [HttpPost("run")]
-        public async Task<IActionResult> RunApiSteps([FromBody] TestInputData requestData)
+        public async Task<IActionResult> RunApiSteps([FromBody] CreateFileInputDto requestData)
         {
             try
             {
-                var runingService = new AiTaskAndInputElemnts();
-                await runingService._AiTaskAndInputElemnts(
+                var runingService = new CreateRecordingFileViaApi();
+                await runingService._CreateRecordingFileViaApi(
                     requestData.RuningApp,
-                    requestData.AiTasksList,
-                    requestData.TestInputSteps);
+                    requestData.RecordFileName);
                 return Ok(new
                 {
                     status = "finished",
-                    message = "Test executed successfully"
+                    message = $"The file {requestData.RecordFileName} was create successfully"
                 });
             }
             catch (Exception ex)

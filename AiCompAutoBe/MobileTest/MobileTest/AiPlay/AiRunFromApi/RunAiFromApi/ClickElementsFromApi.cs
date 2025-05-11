@@ -12,7 +12,7 @@ using ComprehensivePlayrightAuto.MobileTest.InitalMobile.InitialMobileService;
 using System.Text.Json;
 using AiCompAutoBe.MobileTest.InitalMobile.InitialMobileService;
 
-namespace AiCompAutoBe.MobileTest.MobileTest.AiPlay.AiRunFromApi
+namespace AiCompAutoBe.MobileTest.MobileTest.AiPlay.AiRunFromApi.RunAiFromApi
 {
     [TestFixture, Category(
         Categories.MobileAiRun),

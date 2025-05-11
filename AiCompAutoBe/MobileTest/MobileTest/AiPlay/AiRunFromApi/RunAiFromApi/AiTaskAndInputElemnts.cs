@@ -11,11 +11,10 @@ using OpenQA.Selenium.DevTools.V117.Runtime;
 using ComprehensivePlayrightAuto.MobileTest.InitalMobile.InitialMobileService;
 using System.Text.Json;
 using AiCompAutoBe.MobileTest.InitalMobile.InitialMobileService;
-using AiCompAutoBe.MobileTest.MobileTest.AiPlay.AiRunFromApi;
 using static ComprehensivePlayrightAuto.MobileTest.InitalMobile.InitialMobileService.MobileEmulatorMenegar;
 using AiCompAutoBe.MobileTest.MobileFlows;
 
-namespace AiCompAutoBe.MobileTest.MobileTest.AiPlay.AiRunFromApi
+namespace AiCompAutoBe.MobileTest.MobileTest.AiPlay.AiRunFromApi.RunAiFromApi
 {
     [TestFixture, Category(
         Categories.MobileAiRun),
@@ -24,10 +23,10 @@ namespace AiCompAutoBe.MobileTest.MobileTest.AiPlay.AiRunFromApi
     {
 
         [Test]
-        public async Task _AiTaskAndInputElemnts(string runingApp, List<AiTasksList>taskSteps, List<StepInstruction> steps )
+        public async Task _AiTaskAndInputElemnts(string runingApp, List<AiTasksList> taskSteps, List<StepInstruction> steps)
         {
             string deviceId = await new InitialDeviceServices()
-                .PrepareTheDeviceToReadyForRun(runingApp, 
+                .PrepareTheDeviceToReadyForRun(runingApp,
                 EmulatorEnumList.Small_Phone_API_35.ToString());
 
             MobileAiDriverFactory mobileDriver = new MobileAiDriverFactory(deviceId, runingApp);
@@ -52,7 +51,7 @@ namespace AiCompAutoBe.MobileTest.MobileTest.AiPlay.AiRunFromApi
                     Console.WriteLine($"Executing click step: {step}");
                 }
             }
-   
+
             else
             {
                 Console.WriteLine("No steps provided.");
