@@ -178,7 +178,7 @@ namespace ComprehensivePlayrightAuto.MobileTest.InitalMobile.InitialMobileServic
         #endregion
 
         #region Get app opened name 
-        public static string GetForegroundAppPackage()
+        public static string GetForegroundAppName()
         {
             try
             {
@@ -189,7 +189,6 @@ namespace ComprehensivePlayrightAuto.MobileTest.InitalMobile.InitialMobileServic
                         FileName = "adb",
                         Arguments = "shell \"dumpsys window | grep mCurrentFocus\"",
                         RedirectStandardOutput = true,
-                        RedirectStandardError = true,
                         UseShellExecute = false,
                         CreateNoWindow = true
                     }
@@ -199,34 +198,31 @@ namespace ComprehensivePlayrightAuto.MobileTest.InitalMobile.InitialMobileServic
                 string output = process.StandardOutput.ReadToEnd();
                 process.WaitForExit();
 
-                // Trim and check if output contains the expected string
                 if (string.IsNullOrWhiteSpace(output) || !output.Contains("mCurrentFocus"))
-                    return "not application is open now, please check again";
+                    return "No app found.";
 
-                // Extract the app package from the full string
-                var marker = "mCurrentFocus=";
-                var index = output.IndexOf(marker);
-                if (index != -1)
-                {
-                    var sub = output.Substring(index + marker.Length).Trim();
-                    var tokens = sub.Split(' ');
-                    foreach (var token in tokens)
-                    {
-                        if (token.Contains("/"))
-                        {
-                            var appPackage = token.Split('/')[0];
-                            return appPackage;
-                        }
-                    }
-                }
+                var index = output.IndexOf("mCurrentFocus=");
+                if (index == -1)
+                    return "Parsing error.";
 
-                return "not application is open now, please check again";
+                var line = output.Substring(index + "mCurrentFocus=".Length).Trim();
+                var parts = line.Split('/');
+
+                if (parts.Length < 2)
+                    return "Package info not found.";
+
+                var package = parts[0];
+                var appName = package.Split('.').Last().Trim();
+
+                return appName;
             }
             catch (Exception ex)
             {
                 return $"Error: {ex.Message}";
             }
         }
+
+
 
         #endregion
 

@@ -143,9 +143,9 @@ namespace ComprehensiveAutomation.MobileTest.InitalMobile
                 if (previousSource.Equals(currentSource))
                 {
                     // Confirm stability for a few checks (2 more)
-                    Thread.Sleep(200);
+                    Thread.Sleep(100);
                     var secondCheck = appiumDriver.PageSource;
-                    Thread.Sleep(200);
+                    Thread.Sleep(100);
                     var thirdCheck = appiumDriver.PageSource;
 
                     if (secondCheck.Equals(currentSource) && thirdCheck.Equals(currentSource))
@@ -160,6 +160,34 @@ namespace ComprehensiveAutomation.MobileTest.InitalMobile
 
             var failMessage = $"Page did not stabilize within {timeOutInSeconds} seconds.";
             Assert.That(isStable, failMessage);
+        }
+        public void WaitUntilMobilePageStable(int timeoutInSeconds = 5)
+        {
+            int intervalMs = 200;
+            int maxAttempts = (timeoutInSeconds * 1000) / intervalMs;
+            string previous = "";
+            string current = appiumDriver.PageSource;
+
+            for (int i = 0; i < maxAttempts; i++)
+            {
+                Thread.Sleep(intervalMs);
+                previous = current;
+                current = appiumDriver.PageSource;
+
+                if (previous == current)
+                {
+                    // Do 2 more quick checks to confirm it's stable
+                    Thread.Sleep(100);
+                    var check2 = appiumDriver.PageSource;
+                    Thread.Sleep(100);
+                    var check3 = appiumDriver.PageSource;
+
+                    if (check2 == current && check3 == current)
+                        return; // Stable, exit
+                }
+            }
+
+            Assert.Fail("Page did not stabilize in time.");
         }
 
         public void MovbileClickBack()

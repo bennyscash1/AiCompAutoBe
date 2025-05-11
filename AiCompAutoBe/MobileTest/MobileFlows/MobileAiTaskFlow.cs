@@ -31,7 +31,7 @@ namespace AiCompAutoBe.MobileTest.MobileFlows
             while (aiResponceType == (int)aiResponceTypeEnum.ButtonLocator ||
                    aiResponceType == (int)aiResponceTypeEnum.InputLocator)
             {
-                mobileDriverLocator.WaitForPageToLoad();
+              //  mobileDriverLocator.WaitUntilMobilePageStable();
                 string fullPageSource = GetFullPageSource();
                 string jsonAiResponed = "";
                 string listThatWeClickBefore = GetPreviousLocatorsListsInfo(currentAiLocator);
