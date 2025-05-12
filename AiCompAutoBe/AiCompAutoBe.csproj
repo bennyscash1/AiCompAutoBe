@@ -13,10 +13,13 @@
 
   <ItemGroup>
     <Compile Remove="Infra\Data\**" />
+    <Compile Remove="MobileTools\**" />
     <Compile Remove="Properties\**" />
     <EmbeddedResource Remove="Infra\Data\**" />
+    <EmbeddedResource Remove="MobileTools\**" />
     <EmbeddedResource Remove="Properties\**" />
     <None Remove="Infra\Data\**" />
+    <None Remove="MobileTools\**" />
     <None Remove="Properties\**" />
   </ItemGroup>
 

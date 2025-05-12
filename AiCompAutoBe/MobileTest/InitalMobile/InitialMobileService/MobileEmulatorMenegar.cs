@@ -129,18 +129,15 @@ namespace ComprehensivePlayrightAuto.MobileTest.InitalMobile.InitialMobileServic
                 {
                     Console.WriteLine("No devices found. Starting emulator...");
                     //This is the locator for the emulator path - need to add it to cloud
-                    string emulatorPath = "C:\\Bennys\\Developing\\MobileServices\\emulator";
-                    string emulatorExe = "C:\\Bennys\\Developing\\MobileServices\\emulator\\emulator.exe";
-
-                    if (!File.Exists(emulatorExe))
-                        throw new FileNotFoundException("emulator.exe not found at: " + emulatorExe);
+                    string emulatorPath = GetEmulatorExePath();
+                    if (!File.Exists(emulatorPath))
+                        throw new FileNotFoundException("emulator.exe not found at: " + emulatorPath);
 
                     string commandAvd = $"-avd {emulatorName}";
                     Process.Start(new ProcessStartInfo
                     {
-                        FileName = emulatorExe,
+                        FileName = emulatorPath,
                         Arguments = commandAvd,
-                        WorkingDirectory = emulatorPath,
                         UseShellExecute = false,
                         CreateNoWindow = false
                     });
@@ -270,5 +267,23 @@ namespace ComprehensivePlayrightAuto.MobileTest.InitalMobile.InitialMobileServic
             Pixel_XL_API_35,
             Small_Phone_API_35
         }
+
+        public static string GetEmulatorExePath()
+        {
+            var dir = new DirectoryInfo(AppContext.BaseDirectory);
+
+            while (dir != null && dir.Exists)
+            {
+                string potential = Path.Combine(dir.FullName, "MobileTools", "emulator", "emulator.exe");
+                if (File.Exists(potential))
+                    return potential;
+
+                dir = dir.Parent;
+            }
+
+            throw new FileNotFoundException("emulator.exe not found by recursive search.");
+        }
+
+
     }
 }

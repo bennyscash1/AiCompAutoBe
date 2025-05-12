@@ -15,8 +15,11 @@ namespace AiCompAutoBe.MobileTest.InitalMobile.InitialMobileService
     {
         public async Task <string>PrepareTheDeviceToReadyForRun(string runingApp, 
             string deviceName ="")
-        {            
-            deviceName ??= EmulatorEnumList.Pixel_2_API_35.ToString(); 
+        {
+            if (string.IsNullOrEmpty(deviceName))
+            {
+                deviceName = EmulatorEnumList.Pixel_2_API_35.ToString();
+            }
             //Run deviece
             string deviceId = new MobileEmulatorMenegar ()
                 .EnsureDeviceIsRunning(deviceName);

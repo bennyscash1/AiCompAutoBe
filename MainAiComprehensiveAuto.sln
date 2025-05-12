@@ -13,12 +13,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Readme.txt = Readme.txt
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MobileTools", "MobileTools", "{1654F583-9998-4489-9511-D20B6B860FAE}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Emulator", "Emulator", "{62317BFE-A544-4D9A-8A45-C172AC686C72}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Appium", "Appium", "{50DFBEB1-E6E9-4449-A2AA-67E9B51EB628}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,9 +30,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{62317BFE-A544-4D9A-8A45-C172AC686C72} = {1654F583-9998-4489-9511-D20B6B860FAE}
-		{50DFBEB1-E6E9-4449-A2AA-67E9B51EB628} = {1654F583-9998-4489-9511-D20B6B860FAE}
 	EndGlobalSection
 EndGlobal

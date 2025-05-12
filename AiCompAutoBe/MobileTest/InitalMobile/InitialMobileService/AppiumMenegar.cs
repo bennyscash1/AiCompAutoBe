@@ -37,21 +37,21 @@ namespace ComprehensivePlayrightAuto.MobileTest.InitalMobile.InitialMobileServic
                 Console.WriteLine("Appium server is already running.");
                 return;
             }
-            string appiumLoalPath = "C:\\Bennys\\Developing\\MobileServices\\AppiumService\\appium.cmd";
-
-            // string appiumPath = @"C:\Users\benis\AppData\Roaming\npm\appium.cmd";
+            string appiumPath = GetAppiumCmdPath();
             string appiumArg = $"--address 127.0.0.1 --port {MobileAiDriverFactory.appiumPort}";
-
+            if (!File.Exists(appiumPath))
+                throw new FileNotFoundException("Appium path not being found: " + appiumPath);
             var process = new Process
             {
                 StartInfo = new ProcessStartInfo
                 {
-                    FileName = appiumLoalPath,
+                    FileName = appiumPath,
                     Arguments = appiumArg,
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
                     UseShellExecute = false,
-                    CreateNoWindow = true
+                    CreateNoWindow = true,
+                    WorkingDirectory = Path.GetDirectoryName(appiumPath) // ✅ חשוב שיהיה נכון עבור cmd
                 }
             };
 
@@ -79,5 +79,24 @@ namespace ComprehensivePlayrightAuto.MobileTest.InitalMobile.InitialMobileServic
             throw new Exception("Appium server failed to start after multiple retries.");
         }
         #endregion
+
+
+        public static string GetAppiumCmdPath()
+        {
+            var dir = new DirectoryInfo(AppContext.BaseDirectory);
+
+            while (dir != null && dir.Exists)
+            {
+                string potential = Path.Combine(dir.FullName, "MobileTools", "AppiumService", "appium.cmd");
+                if (File.Exists(potential))
+                    return potential;
+
+                dir = dir.Parent;
+            }
+
+            throw new FileNotFoundException("appium.cmd not found by recursive search.");
+        }
+        
+
     }
 }
