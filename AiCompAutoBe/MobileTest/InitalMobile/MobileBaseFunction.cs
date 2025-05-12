@@ -161,7 +161,7 @@ namespace ComprehensiveAutomation.MobileTest.InitalMobile
             var failMessage = $"Page did not stabilize within {timeOutInSeconds} seconds.";
             Assert.That(isStable, failMessage);
         }
-        public void WaitUntilMobilePageStable(int timeoutInSeconds = 5)
+        public void WaitForPageResourceToLoad(int timeoutInSeconds = 5)
         {
             int intervalMs = 200;
             int maxAttempts = (timeoutInSeconds * 1000) / intervalMs;

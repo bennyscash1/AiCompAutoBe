@@ -19,11 +19,11 @@ namespace AiCompAutoBe.MobileTest.MobileTest.AiPlay.AiRunFromApi.RunAiFromApi
     [TestFixture, Category(
         Categories.MobileAiRun),
     Category(TestLevel.Level_1)]
-    public class AiTaskAndInputElemnts
+    public class AiTaskAndStepsINputFromApi
     {
 
         [Test]
-        public async Task _AiTaskAndInputElemnts(string runingApp, List<AiTasksList> taskSteps, List<StepInstruction> steps)
+        public async Task _AiTaskAndStepsINputFromApi(string runingApp, List<AiTasksList> taskSteps, List<StepInstruction> steps)
         {
             string deviceId = await new InitialDeviceServices()
                 .PrepareTheDeviceToReadyForRun(runingApp,

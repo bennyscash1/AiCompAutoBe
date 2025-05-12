@@ -13,8 +13,8 @@ namespace AiApiCompAuto.Controllers
         {
             try
             {
-                var runingService = new AiTaskAndInputElemnts();
-                await runingService._AiTaskAndInputElemnts(
+                var runingService = new AiTaskAndStepsINputFromApi();
+                await runingService._AiTaskAndStepsINputFromApi(
                     requestData.RuningApp,
                     requestData.AiTasksList,
                     requestData.TestInputSteps);
