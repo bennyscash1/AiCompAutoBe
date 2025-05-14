@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using OpenAI.Chat;
 using System.Text;
 using System.Text.Json;
@@ -190,7 +191,6 @@ namespace SafeCash.Test.ApiTest.Integration.OpenAi
 
             return apiResponce;
         }
-
         #endregion
 
         #region Grok ai request
@@ -287,6 +287,47 @@ namespace SafeCash.Test.ApiTest.Integration.OpenAi
                 .GetString();
 
             return contentResponce;
+        }
+        #endregion
+
+        #region Claude ais request
+
+        public async Task<string> GetClaudeResponse(string userPrompts, SystemPromptTypeEnum aiRequest)
+        {
+            string prePrompt = GetSystemPrompt(aiRequest);
+            string apiKey = Environment.GetEnvironmentVariable("CLAUDE_API_KEY"); // or hardcode for testing
+            string url = "https://api.anthropic.com/v1/messages";
+
+            var requestBody = new
+            {
+                model = "claude-3-5-haiku-20241022",
+                max_tokens = 1024,
+                messages = new[]
+                {
+                new { 
+                    role = prePrompt, 
+                    content = userPrompts }
+            }
+            };
+
+            var json = JsonConvert.SerializeObject(requestBody);
+            var request = new HttpRequestMessage(HttpMethod.Post, url);
+            request.Headers.Add("x-api-key", apiKey);
+            request.Headers.Add("anthropic-version", "2023-06-01");
+            request.Content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.SendAsync(request);
+            string responseContent = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return $"Error: {response.StatusCode}\n{responseContent}";
+            }
+
+            JObject parsed = JObject.Parse(responseContent);
+            var text = parsed["content"]?[0]?["text"]?.ToString();
+
+            return text ?? "No text content found.";
         }
         #endregion
     }

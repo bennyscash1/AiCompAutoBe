@@ -27,17 +27,18 @@ namespace AiCompAutoBe.MobileTest.MobileTest.AiPlay.AiRunFromApi.RunAiFromApi
         {
             string deviceId = await new InitialDeviceServices()
                 .PrepareTheDeviceToReadyForRun(runingApp,
-                EmulatorEnumList.Small_Phone_API_35.ToString());
+                EmulatorEnumList.Pixel_2_API_35.ToString());
 
             MobileAiDriverFactory mobileDriver = new MobileAiDriverFactory(deviceId, runingApp);
-            MobileAiTaskFlow mobileFlow = new MobileAiTaskFlow(mobileDriver.appiumDriver);
+            //MobileAiTaskFlow mobileFlow = new MobileAiTaskFlow(mobileDriver.appiumDriver);
 
             #region Get the ai task 
             if (taskSteps != null && taskSteps.Any())
             {
                 foreach (var taskStep in taskSteps)
                 {
-                    await mobileFlow.HandleAiTaskMission(taskStep.TaskStep);
+                    var mobileTaskFlow = new MobileAiTaskFlow(mobileDriver.appiumDriver); 
+                    await mobileTaskFlow.HandleAiTaskMission(taskStep.TaskStep);
                     Console.WriteLine($"Executing task step: {taskStep}");
                 }
             }
@@ -47,7 +48,8 @@ namespace AiCompAutoBe.MobileTest.MobileTest.AiPlay.AiRunFromApi.RunAiFromApi
             {
                 foreach (var step in steps)
                 {
-                    await mobileFlow.TalkWithApp(step.ElementView, step.InputText);
+                    var mobileSingleFlow = new MobileAiTaskFlow(mobileDriver.appiumDriver); 
+                    await mobileSingleFlow.TalkWithApp(step.ElementView, step.InputText);
                     Console.WriteLine($"Executing click step: {step}");
                 }
             }

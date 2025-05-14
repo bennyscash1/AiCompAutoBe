@@ -9,11 +9,11 @@ namespace SafeCash.Test.ApiTest.InternalApiTest.Buyer
 {
     public class AndroidAiService 
     {
-         public async Task <string> GetAndroidLocatorFromUserTextInput(
+         public async Task <string> GetAndroidSingleLocatorFromUserTextInput(
              string fullPageSource, string userInputView)
         {          
             OpenAiService openAiService = new OpenAiService();
-            string responceLocatorFromAi = await openAiService.GrokRequestService(
+            string responceLocatorFromAi = await openAiService.GetClaudeResponse(
                 $"Here is the full app XML source:," +
                 $"{fullPageSource}\n\n" +
                 $" I need to find the XPath locator for the button or input field for the next line>>: '\n"+
@@ -97,13 +97,13 @@ namespace SafeCash.Test.ApiTest.InternalApiTest.Buyer
                 return false;
             }
         }
-
-        #region Ai service for tasks 
-        public async Task<string> GetAiResponedAsJson(
+      
+        #region Ai service for API tasks 
+        public async Task<string> GetAiResponedTaskAsJson(
            string fullPageSource, string userEndGoalMission, string userUpdateOnFailedScenario = "")
         {
             OpenAiService openAiService = new OpenAiService();
-            string responceLocatorFromAi = await openAiService.GrokRequestService(
+            string responceLocatorFromAi = await openAiService.GetClaudeResponse(
                 $"XML:\n{fullPageSource}\n\n" +
                 $"The user Goal:\n" +
                 $"{userEndGoalMission}\n\n" +
@@ -123,6 +123,7 @@ namespace SafeCash.Test.ApiTest.InternalApiTest.Buyer
                 return string.Empty;
             }
         }
+
         public static bool isAiReturnValidJson(string input)
         {
             try

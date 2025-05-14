@@ -66,7 +66,7 @@ namespace ComprehensiveAutomation.Test.UiTest.MobileTest.MobileFlows
                 //Test if the locator is a valid one
                 if (!isLocatorValid)
                 {
-                    locator = await aiService.GetAndroidLocatorFromUserTextInput(fullPageSource, elementView);
+                    locator = await aiService.GetAndroidSingleLocatorFromUserTextInput(fullPageSource, elementView);
                     isLocatorValid = AndroidAiService.isLocatorValid(locator);
                 }
                 if (isLocatorValid)

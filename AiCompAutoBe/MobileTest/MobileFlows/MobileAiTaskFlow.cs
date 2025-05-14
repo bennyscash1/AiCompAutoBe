@@ -16,13 +16,14 @@ namespace AiCompAutoBe.MobileTest.MobileFlows
     public class MobileAiTaskFlow : MobileBaseFlow
     {
         MobileLoginPage mobileDriverLocator;
+        List<By> PreviosLocator;
+        By? currentAiLocator;
         public MobileAiTaskFlow(AndroidDriver i_driver) : base(i_driver)
         {
             appiumDriver = i_driver;
             mobileDriverLocator = new MobileLoginPage(appiumDriver);
+
         }
-        List<By> PreviosLocator;
-        By? currentAiLocator;
         public async Task<int> HandleAiTaskMission(string userGoalMission)
         {
             var aiService = new AndroidAiService();
@@ -31,13 +32,13 @@ namespace AiCompAutoBe.MobileTest.MobileFlows
             while (aiResponceType == (int)aiResponceTypeEnum.ButtonLocator ||
                    aiResponceType == (int)aiResponceTypeEnum.InputLocator)
             {
-                mobileDriverLocator.WaitUntilMobilePageStable();
+                mobileDriverLocator.WaitForPageResourceToLoad();
                 string fullPageSource = GetFullPageSource();
                 string jsonAiResponed = "";
                 string listThatWeClickBefore = GetPreviousLocatorsListsInfo(currentAiLocator);
-                if (listThatWeClickBefore != null)
+                if (!string.IsNullOrEmpty(listThatWeClickBefore))
                 {
-                    jsonAiResponed = await aiService.GetAiResponedAsJson(
+                    jsonAiResponed = await aiService.GetAiResponedTaskAsJson(
                       fullPageSource,
                       userGoalMission,
                       "Update: Here is a list of locators that have already been clicked.\n" +
@@ -46,7 +47,7 @@ namespace AiCompAutoBe.MobileTest.MobileFlows
                 }
                 else
                 {
-                    jsonAiResponed = await aiService.GetAiResponedAsJson(fullPageSource, userGoalMission);
+                    jsonAiResponed = await aiService.GetAiResponedTaskAsJson(fullPageSource, userGoalMission);
                 }
 
                 aiResponceType = GetTypeFromJson(jsonAiResponed);
@@ -84,7 +85,7 @@ namespace AiCompAutoBe.MobileTest.MobileFlows
             #region Test if the element display on the page
             while (!mobileDriverLocator.IsHavyElementFount(locator) && retry < 3)
             {
-                jsonResponse = await aiService.GetAiResponedAsJson(
+                jsonResponse = await aiService.GetAiResponedTaskAsJson(
                     fullPageSource, userGoal, $"The element '{locator}' not on the page, please check again");
 
                 locator = GetXPathLocatorFromAiJson(jsonResponse);
