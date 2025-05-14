@@ -300,14 +300,13 @@ namespace SafeCash.Test.ApiTest.Integration.OpenAi
 
             var requestBody = new
             {
-                model = "claude-3-5-haiku-20241022",
+                model = "claude-3-5-sonnet-20240620",
                 max_tokens = 1024,
+                system = prePrompt, // ✅ put system prompt here!
                 messages = new[]
                 {
-                new { 
-                    role = prePrompt, 
-                    content = userPrompts }
-            }
+                    new { role = "user", content = userPrompts }
+                }
             };
 
             var json = JsonConvert.SerializeObject(requestBody);

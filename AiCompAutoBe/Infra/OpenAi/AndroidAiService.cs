@@ -104,9 +104,9 @@ namespace SafeCash.Test.ApiTest.InternalApiTest.Buyer
         {
             OpenAiService openAiService = new OpenAiService();
             string responceLocatorFromAi = await openAiService.GetClaudeResponse(
-                $"XML:\n{fullPageSource}\n\n" +
-                $"The user Goal:\n" +
+                $"The user Goal task:\n" +
                 $"{userEndGoalMission}\n\n" +
+                $"Here the XML:\n{fullPageSource}\n\n" +            
                 $"{userUpdateOnFailedScenario}",
 
                 OpenAiService.SystemPromptTypeEnum.MobileSystemPromptMissionTask);
