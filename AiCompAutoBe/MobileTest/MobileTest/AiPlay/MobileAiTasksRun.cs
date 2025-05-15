@@ -19,7 +19,7 @@ namespace AiCompAutoBe.MobileTest.MobileTest.AiPlay
     Category(TestLevel.Level_1)]
     public class MobileAiTasksRun
     {
-        static string appRuningName = "Calculator";
+        static string appRuningName = "Chrome";
         public string deviceId = string.Empty;
 
         [Test]
@@ -33,7 +33,7 @@ namespace AiCompAutoBe.MobileTest.MobileTest.AiPlay
 
             //Click on app buttons
             int aiResponceType = await mobileFlow.HandleAiTaskMission(
-                   "Click on number number 9");
+                   "YOur mission is to navigate to the search google page, approve and confirm all buttons till you get to this page.");
             await mobileFlow.TalkWithApp("Click on number 9");
             
 

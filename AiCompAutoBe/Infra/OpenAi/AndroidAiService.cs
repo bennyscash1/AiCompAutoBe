@@ -97,32 +97,46 @@ namespace SafeCash.Test.ApiTest.InternalApiTest.Buyer
                 return false;
             }
         }
-      
+
         #region Ai service for API tasks 
         public async Task<string> GetAiResponedTaskAsJson(
-           string fullPageSource, string userEndGoalMission, string userUpdateOnFailedScenario = "")
+          string fullPageSource, string userEndGoalMission, string userUpdateOnFailedScenario = "")
         {
             OpenAiService openAiService = new OpenAiService();
-            string responceLocatorFromAi = await openAiService.GetClaudeResponse(
-                $"The user Goal task:\n" +
-                $"{userEndGoalMission}\n\n" +
-                $"Here the XML:\n{fullPageSource}\n\n" +            
-                $"{userUpdateOnFailedScenario}",
+            string lastResponse = string.Empty;
 
-                OpenAiService.SystemPromptTypeEnum.MobileSystemPromptMissionTask);
+            for (int attempt = 1; attempt <= 3; attempt++)
+            {
+                string userPrompt =
+                    $"The user Goal task:\n{userEndGoalMission}\n\n" +
+                    $"Here the XML:\n{fullPageSource}\n\n";
 
-            bool isLocatorValid = isAiReturnValidJson(responceLocatorFromAi);
-            if (isLocatorValid)
-            {
-                return responceLocatorFromAi;
+                if (attempt > 1)
+                {
+                    userPrompt +=
+                        $"Your previous response was invalid:\n{lastResponse}\n\n" +
+                        "⚠️ Please return a **valid JSON only**, one of the following:\n" +
+                        "- { \"type\": 1, \"xpath\": \"...\" }\n" +
+                        "- { \"type\": 2, \"xpath\": \"...\", \"value\": \"...\" }\n" +
+                        "- { \"type\": 3 }\n" +
+                        "- { \"type\": 0 }\n\n" +
+                        "If the task is already complete, return only { \"type\": 3 }.";
+                }
+
+                lastResponse = await openAiService.GetClaudeResponse(
+                    userPrompt,
+                    OpenAiService.SystemPromptTypeEnum.MobileSystemPromptMissionTask
+                );
+
+                if (isAiReturnValidJson(lastResponse))
+                    return lastResponse;
             }
-            else
-            {
-                Assert.That(isLocatorValid, Is.True,
-                    $"THe ai responed invalid json: {responceLocatorFromAi}");
-                return string.Empty;
-            }
+
+            // After 3 failed attempts, throw to stop test and alert the API controller
+            throw new InvalidOperationException(
+                "AI failed to return a valid JSON response after 3 attempts.\nLast response:\n" + lastResponse);
         }
+
 
         public static bool isAiReturnValidJson(string input)
         {
