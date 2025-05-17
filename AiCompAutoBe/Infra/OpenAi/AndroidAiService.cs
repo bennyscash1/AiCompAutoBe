@@ -109,7 +109,8 @@ namespace SafeCash.Test.ApiTest.InternalApiTest.Buyer
             {
                 string userPrompt =
                     $"The user Goal task:\n{userEndGoalMission}\n\n" +
-                    $"Here the XML:\n{fullPageSource}\n\n";
+                    $"Here the XML:\n{fullPageSource}\n\n" +
+                    $"{userUpdateOnFailedScenario}";
 
                 if (attempt > 1)
                 {

@@ -8,7 +8,7 @@ namespace AiApiCompAuto.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class GetAppNameController : ControllerBase
+    public class GetAppAndDeviceNameController : ControllerBase
     {
         [HttpGet("run")]
         public async Task<IActionResult> RunApiSteps()

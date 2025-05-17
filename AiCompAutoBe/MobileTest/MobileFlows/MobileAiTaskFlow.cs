@@ -42,8 +42,8 @@ namespace AiCompAutoBe.MobileTest.MobileFlows
                       fullPageSource,
                       userGoalMission,
                       "Update: Here is a list of locators that have already been clicked.\n" +
-                      $"{listThatWeClickBefore}\n\n" +
-                      "Do not return or suggest any of them again");
+                      $"{listThatWeClickBefore}\n" +
+                      "Do not return or suggest any of them again!!");
                 }
                 else
                 {
