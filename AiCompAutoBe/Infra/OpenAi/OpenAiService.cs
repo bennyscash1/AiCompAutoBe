@@ -83,55 +83,34 @@ namespace SafeCash.Test.ApiTest.Integration.OpenAi
             "- Ignore elements where X and Y are not fully contained inside bounds.\n";
 
         string aiSystemPromptMissionTask =
-                       "You are an intelligent navigation agent inside a mobile application.\n\n" +
-                       "Your goal is to analyze each screen of the app (given as an Android XML UI hierarchy) and guide the user step-by-step toward reaching the desired page or performing the requested action.\n\n" +
+             "You are a smart navigation agent inside a mobile app.\n\n" +
+             "Your task is to analyze the given Android XML UI hierarchy and guide the user step-by-step to complete their goal.\n\n" +
+             "Input:\n" +
+             "1. xmlHierarchy – the current screen's XML.\n" +
+             "2. userGoal – a free-text description of what the user wants to do (e.g. 'Search for Hello World').\n\n" +
+             "Process:\n" +
+             "- Parse the XML and check if the goal is already complete.\n" +
+             "- If the user goal is fully completed (all required inputs/actions are done), return:\n" +
+             "  { \"type\": 3 }\n" +
+             "- If not, find the next visible UI element that moves the user closer to the goal.\n" +
+             "- Prefer buttons like 'Next', 'OK', or 'Continue' unless the goal says otherwise.\n" +
+             "- Only suggest actions that match real elements in the XML (no guesses).\n" +
+             "- Use exact XPaths based on class, text, content-desc, or resource-id.\n" +
+             "- Return only one step at a time – button click or input.\n" +
+             "- If stuck, return: { \"type\": 0 }\n\n" +
 
-                       "Input:\n" +
-                       "1. xmlHierarchy: A full Android XML hierarchy string representing the current screen.\n" +
-                       "2. userGoal: A free-text description of the screen the user wants to reach or the action they want to complete (e.g., 'Navigate to the search page and enter Hello World').\n\n" +
+             "Output format:\n" +
+             "- Click: { \"type\": 1, \"xpath\": \"...\" }\n" +
+             "- Input: { \"type\": 2, \"xpath\": \"...\", \"value\": \"...\" }\n" +
+             "- Done: { \"type\": 3 }\n" +
+             "- No action: { \"type\": 0 }\n\n" +
 
-                       "Process:\n" +
-                       "- Parse the XML structure.\n" +
-                       "- Check if the current screen fulfills the user's goal.\n" +
-                       "  - For input tasks: if the expected value is already present in the input field **and** the UI shows matching suggestions, search results, or indications of progress — consider the goal complete.\n" +
-                       "  - If the goal has been reached: return { \"type\": 3 }\n" +
-                       "- If the goal has not been reached:\n" +
-                       "  - Identify the **shortest and most direct visible path** that will advance the user one step closer to the goal.\n" +
-                       "  - **Always prefer skip, dismiss, continue, confirm, or acknowledge buttons** (e.g., 'Next', 'Got it', 'OK') over options like 'Settings', 'Customize', or other configuration pages, unless explicitly required to reach the goal.\n" +
-                       "  - You must only return XPaths that match real, existing elements in the provided XML.\n" +
-                       "  - Do not invent or guess index-based XPath expressions. Only use elements that can be located directly in the XML using their class, resource-id, text, content-desc, and actual position.\n" +
-                       "  - If the element is a button, return:\n" +
-                       "    { \"type\": 1, \"xpath\": \"xpath of the element to click\" }\n" +
-                       "  - If it's an input field, return:\n" +
-                       "    { \"type\": 2, \"xpath\": \"xpath of the input field\", \"value\": \"value to input (from goal or generate a smart default)\" }\n" +
-                       "- Only return **one step per response**. The loop will call you again with updated XML.\n" +
-                       "- If there’s nothing reasonable to do, return:\n" +
-                       "  { \"type\": 0 }\n\n" +
+             "Important:\n" +
+             "- If all required steps are marked as already clicked (via provided locators), return { \"type\": 3 } and do not continue.\n" +
+             "- Never return commentary or code blocks – only a valid JSON object.\n" +
+             "- Do not return suggestions for extra UI elements if not part of the userGoal.\n";
 
-                       "Response format:\n" +
-                       "1. Button to click:\n" +
-                       "{ \"type\": 1, \"xpath\": \"xpath of the button\" }\n\n" +
-                       "2. Input field to fill:\n" +
-                       "{ \"type\": 2, \"xpath\": \"xpath of the input field\", \"value\": \"text to enter\" }\n\n" +
-                       "3. Goal has been reached:\n" +
-                       "{ \"type\": 3 }\n\n" +
-                       "4. No idea how to proceed:\n" +
-                       "{ \"type\": 0 }\n\n" +
 
-                       "Notes:\n" +
-                       "- Always choose the **fastest visible path** to the goal, minimizing unnecessary steps.\n" +
-                       "- Be smart. Consider the intent behind the goal and choose actions that help achieve it efficiently.\n" +
-                       "- Use text, content-desc, resource-id, and bounds to infer meaning and visibility.\n" +
-                       "- Avoid suggesting invisible or disabled elements.\n" +
-                       "- Only return XPath expressions that exactly match existing elements in the hierarchy.\n" +
-                       "- If multiple elements match, choose the one with the clearest and shortest intent toward the goal.\n\n" +
-
-                       "⚠️ **Important Output Rules** ⚠️\n" +
-                       "- You must always return a **valid JSON object** (not code block, not explanation).\n" +
-                       "- If returning type 1 or 2, the XPath must exactly match an element from the XML.\n" +
-                       "- If the goal is already complete, return: { \"type\": 3 }\n" +
-                       "- If you're unsure what to do, return: { \"type\": 0 }\n" +
-                       "- Do not return plain text, commentary, or partial results. Only valid JSON.\n";
 
         public string GetSystemPrompt(SystemPromptTypeEnum aiRequest)
         {
@@ -307,27 +286,25 @@ namespace SafeCash.Test.ApiTest.Integration.OpenAi
         public async Task<string> GetClaudeResponse(string userPrompts, SystemPromptTypeEnum aiRequest)
         {
             string prePrompt = GetSystemPrompt(aiRequest);
-            string apiKey = Environment.GetEnvironmentVariable("CLAUDE_API_KEY"); // or hardcode for testing
+            string apiKey = Environment.GetEnvironmentVariable("CLAUDE_API_KEY");
             string url = "https://api.anthropic.com/v1/messages";
-
+            string claudeModel = "claude-3-5-sonnet-20240620";
             var requestBody = new
             {
-                model = "claude-3-5-sonnet-20240620",
+                model = "claude-3-5-haiku-20241022",
                 max_tokens = 1024,
-                system = prePrompt, // ✅ put system prompt here!
+                system = prePrompt,
                 messages = new[]
                 {
-                    new { role = "user", content = userPrompts }
-                }
+            new { role = "user", content = userPrompts }
+        }
             };
 
             var json = JsonConvert.SerializeObject(requestBody);
-            var request = new HttpRequestMessage(HttpMethod.Post, url);
-            request.Headers.Add("x-api-key", apiKey);
-            request.Headers.Add("anthropic-version", "2023-06-01");
-            request.Content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.SendAsync(request);
+            // Use the retry method with fresh request creation
+            var response = await SendWithRetries(json, url, apiKey);
+
             string responseContent = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)
@@ -340,6 +317,28 @@ namespace SafeCash.Test.ApiTest.Integration.OpenAi
 
             return text ?? "No text content found.";
         }
+
+        private async Task<HttpResponseMessage> SendWithRetries(string json, string url, string apiKey, int maxRetries = 3)
+        {
+            for (int attempt = 0; attempt < maxRetries; attempt++)
+            {
+                var request = new HttpRequestMessage(HttpMethod.Post, url);
+                request.Headers.Add("x-api-key", apiKey);
+                request.Headers.Add("anthropic-version", "2023-06-01");
+                request.Content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await _httpClient.SendAsync(request);
+
+                if ((int)response.StatusCode != 529)
+                    return response;
+
+                int waitTime = (int)Math.Pow(2, attempt + 1) * 1000; // 2s, 4s, 8s
+                await Task.Delay(waitTime);
+            }
+
+            throw new Exception("Claude API is overloaded (529) after multiple retries.");
+        }
+
         #endregion
     }
 }

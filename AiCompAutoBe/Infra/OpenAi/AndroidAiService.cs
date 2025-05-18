@@ -124,13 +124,13 @@ namespace SafeCash.Test.ApiTest.InternalApiTest.Buyer
                         "If the task is already complete, return only { \"type\": 3 }.";
                 }
 
-                lastResponse = await openAiService.GetClaudeResponse(
+                lastResponse = await openAiService.GrokRequestService(
                     userPrompt,
                     OpenAiService.SystemPromptTypeEnum.MobileSystemPromptMissionTask
                 );
 
-                if (isAiReturnValidJson(lastResponse))
-                    return lastResponse;
+                if (IsAiReturnValidJson(lastResponse, out var cleanJson))
+                    return cleanJson;
             }
 
             // After 3 failed attempts, throw to stop test and alert the API controller
@@ -139,20 +139,33 @@ namespace SafeCash.Test.ApiTest.InternalApiTest.Buyer
         }
 
 
-        public static bool isAiReturnValidJson(string input)
+        public static bool IsAiReturnValidJson(string input, out string fixedJson)
         {
+            fixedJson = null;
+
+            // Try to locate the first valid JSON object in the input
+            int start = input.IndexOf('{');
+            int end = input.LastIndexOf('}');
+            if (start == -1 || end == -1 || end <= start)
+                return false;
+
+            string jsonCandidate = input.Substring(start, end - start + 1).Trim();
+
             try
             {
-                using (JsonDocument.Parse(input))
+                using (JsonDocument.Parse(jsonCandidate))
                 {
+                    fixedJson = jsonCandidate;
                     return true;
                 }
             }
             catch (JsonException)
             {
+                Console.WriteLine("The AI responded with an invalid JSON.");
                 return false;
             }
         }
+
         #endregion
 
     }
