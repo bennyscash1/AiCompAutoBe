@@ -1,0 +1,111 @@
+#SCREEN Physical size: 1080x2340
+add device 1: /dev/input/event2
+  name:     "meta_event"
+add device 2: /dev/input/event5
+  name:     "ssp_context"
+add device 3: /dev/input/event3
+  name:     "als_rear"
+add device 4: /dev/input/event7
+  name:     "sec_touchpad"
+add device 5: /dev/input/event0
+  name:     "gpio_keys"
+add device 6: /dev/input/event6
+  name:     "sec_touchscreen"
+add device 7: /dev/input/event1
+  name:     "sec-pmic-key"
+add device 8: /dev/input/event10
+  name:     "grip_notifier"
+add device 9: /dev/input/event4
+  name:     "hall"
+add device 10: /dev/input/event9
+  name:     "grip_sensor"
+add device 11: /dev/input/event8
+  name:     "sec_touchproximity"
+[  259806.446463] /dev/input/event6: 0003 0039 00000837
+[  259806.446463] /dev/input/event6: 0001 014a 00000001
+[  259806.446463] /dev/input/event6: 0001 0145 00000001
+[  259806.446463] /dev/input/event6: 0003 0035 000008be
+[  259806.446463] /dev/input/event6: 0003 0036 00000ab1
+[  259806.446463] /dev/input/event6: 0000 0000 00000000
+[  259806.502857] /dev/input/event6: 0003 0030 00000011
+[  259806.502857] /dev/input/event6: 0003 0031 00000011
+[  259806.502857] /dev/input/event6: 0000 0000 00000000
+[  259806.527859] /dev/input/event6: 0003 0030 00000012
+[  259806.527859] /dev/input/event6: 0000 0000 00000000
+[  259806.536219] /dev/input/event6: 0003 0031 00000012
+[  259806.536219] /dev/input/event6: 0000 0000 00000000
+[  259806.561213] /dev/input/event6: 0003 0030 00000013
+[  259806.561213] /dev/input/event6: 0000 0000 00000000
+[  259806.569670] /dev/input/event6: 0003 0031 00000013
+[  259806.569670] /dev/input/event6: 0000 0000 00000000
+[  259806.594531] /dev/input/event6: 0003 0035 000008bf
+[  259806.594531] /dev/input/event6: 0003 0036 00000ab0
+[  259806.594531] /dev/input/event6: 0003 0030 00000010
+[  259806.594531] /dev/input/event6: 0003 0031 00000010
+[  259806.594531] /dev/input/event6: 0000 0000 00000000
+[  259806.603028] /dev/input/event6: 0003 0039 ffffffff
+[  259806.603028] /dev/input/event6: 0001 014a 00000000
+[  259806.603028] /dev/input/event6: 0001 0145 00000000
+[  259806.603028] /dev/input/event6: 0000 0000 00000000
+[  259806.753363] /dev/input/event6: 0003 0039 00000838
+[  259806.753363] /dev/input/event6: 0001 014a 00000001
+[  259806.753363] /dev/input/event6: 0001 0145 00000001
+[  259806.753363] /dev/input/event6: 0003 0035 00000731
+[  259806.753363] /dev/input/event6: 0003 0036 00000a21
+[  259806.753363] /dev/input/event6: 0000 0000 00000000
+[  259806.803028] /dev/input/event6: 0003 0030 00000011
+[  259806.803028] /dev/input/event6: 0000 0000 00000000
+[  259806.827928] /dev/input/event6: 0003 0031 00000011
+[  259806.827928] /dev/input/event6: 0000 0000 00000000
+[  259806.853022] /dev/input/event6: 0003 0039 ffffffff
+[  259806.853022] /dev/input/event6: 0001 014a 00000000
+[  259806.853022] /dev/input/event6: 0001 0145 00000000
+[  259806.853022] /dev/input/event6: 0000 0000 00000000
+[  259806.961430] /dev/input/event6: 0003 0039 00000839
+[  259806.961430] /dev/input/event6: 0001 014a 00000001
+[  259806.961430] /dev/input/event6: 0001 0145 00000001
+[  259806.961430] /dev/input/event6: 0003 0035 00000627
+[  259806.961430] /dev/input/event6: 0003 0036 000009c4
+[  259806.961430] /dev/input/event6: 0003 0030 00000014
+[  259806.961430] /dev/input/event6: 0003 0031 00000014
+[  259806.961430] /dev/input/event6: 0000 0000 00000000
+[  259806.969671] /dev/input/event6: 0003 0030 00000015
+[  259806.969671] /dev/input/event6: 0000 0000 00000000
+[  259807.053108] /dev/input/event6: 0003 0039 ffffffff
+[  259807.053108] /dev/input/event6: 0001 014a 00000000
+[  259807.053108] /dev/input/event6: 0001 0145 00000000
+[  259807.053108] /dev/input/event6: 0000 0000 00000000
+[  259807.144815] /dev/input/event6: 0003 0039 0000083a
+[  259807.144815] /dev/input/event6: 0001 014a 00000001
+[  259807.144815] /dev/input/event6: 0001 0145 00000001
+[  259807.144815] /dev/input/event6: 0003 0035 000005b4
+[  259807.144815] /dev/input/event6: 0003 0036 0000099e
+[  259807.144815] /dev/input/event6: 0003 0030 00000011
+[  259807.144815] /dev/input/event6: 0003 0031 00000010
+[  259807.144815] /dev/input/event6: 0000 0000 00000000
+[  259807.178043] /dev/input/event6: 0003 0031 00000011
+[  259807.178043] /dev/input/event6: 0000 0000 00000000
+[  259807.236407] /dev/input/event6: 0003 0030 00000010
+[  259807.236407] /dev/input/event6: 0003 0031 00000010
+[  259807.236407] /dev/input/event6: 0000 0000 00000000
+[  259807.244773] /dev/input/event6: 0003 0039 ffffffff
+[  259807.244773] /dev/input/event6: 0001 014a 00000000
+[  259807.244773] /dev/input/event6: 0001 0145 00000000
+[  259807.244773] /dev/input/event6: 0000 0000 00000000
+[  259807.336577] /dev/input/event6: 0003 0039 0000083b
+[  259807.336577] /dev/input/event6: 0001 014a 00000001
+[  259807.336577] /dev/input/event6: 0001 0145 00000001
+[  259807.336577] /dev/input/event6: 0003 0035 000005a1
+[  259807.336577] /dev/input/event6: 0003 0036 0000098b
+[  259807.336577] /dev/input/event6: 0000 0000 00000000
+[  259807.378043] /dev/input/event6: 0003 0030 00000011
+[  259807.378043] /dev/input/event6: 0003 0031 00000011
+[  259807.378043] /dev/input/event6: 0000 0000 00000000
+[  259807.419849] /dev/input/event6: 0003 0030 00000012
+[  259807.419849] /dev/input/event6: 0000 0000 00000000
+[  259807.428091] /dev/input/event6: 0003 0030 00000011
+[  259807.428091] /dev/input/event6: 0000 0000 00000000
+[  259807.436517] /dev/input/event6: 0003 0039 ffffffff
+[  259807.436517] /dev/input/event6: 0001 014a 00000000
+[  259807.436517] /dev/input/event6: 0001 0145 00000000
+[  259807.436517] /dev/input/event6: 0000 0000 00000000

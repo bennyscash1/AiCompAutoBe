@@ -7,6 +7,7 @@ namespace AiApiCompAuto.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    //Not used
     public class CreateRecordController : ControllerBase
     {
         [HttpPost("run")]
@@ -15,7 +16,7 @@ namespace AiApiCompAuto.Controllers
             try
             {
                 var runingService = new CreateRecordingFileViaApi();
-                await runingService._CreateRecordingFileViaApi(
+                await runingService.StartRecordingAsync(
                     requestData.RuningApp,
                     requestData.RecordFileName);
                 return Ok(new

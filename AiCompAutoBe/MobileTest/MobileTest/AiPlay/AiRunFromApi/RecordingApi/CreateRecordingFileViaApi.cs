@@ -1,6 +1,7 @@
 ﻿using AiCompAutoBe.MobileTest.InitalMobile.InitialMobileService;
 using AiCompAutoBe.MobileTest.MobileFlows;
 using AiCompAutoBe.MobileTest.MobileTest.AiPlay.AiRunFromApi.RunAiFromApi;
+using AiCompAutoBe.MobileTest.MobileTest.RecordAndPlay;
 using ComprehensiveAutomation.MobileTest.Inital;
 using ComprehensivePlayrightAuto.MobileTest.MobileServices.RecordLocators;
 using NUnit.Framework;
@@ -20,24 +21,37 @@ namespace AiCompAutoBe.MobileTest.MobileTest.AiPlay.AiRunFromApi.RecordingApi
     Category(TestLevel.Level_1)]
     public class CreateRecordingFileViaApi
     {
-        [Test]
-        public async Task _CreateRecordingFileViaApi(string runingApp, string recordingFileName)
+        public async Task<string> StartRecordingAsync(string runingApp, string recordingFileName)
         {
             string deviceId = await new InitialDeviceServices()
-                .PrepareTheDeviceToReadyForRun(runingApp,
-                EmulatorEnumList.Small_Phone_API_35.ToString());
+                .PrepareTheDeviceToReadyForRun(runingApp, EmulatorEnumList.Small_Phone_API_35.ToString());
 
             MobileAiDriverFactory mobileDriver = new MobileAiDriverFactory(deviceId, runingApp);
             MobileAiTaskFlow mobileFlow = new MobileAiTaskFlow(mobileDriver.appiumDriver);
 
-            #region Get recording into file
             RecordLocatoreService recordLocatoreService = new RecordLocatoreService();
             string recordFile = recordLocatoreService.CreateRecordFile(recordingFileName);
 
-            Process recordProccess = recordLocatoreService.StartAdbRecordingToFile(recordFile);
-            Thread.Sleep(1000);
-            recordLocatoreService.StopAdbRecording(recordProccess);
-            #endregion
+            Process recordProcess = recordLocatoreService.StartAdbRecordingToFile(recordFile);
+
+            // ✅ Store recording session globally
+            RecordingSessionStore.CurrentRecordingProcess = recordProcess;
+            RecordingSessionStore.CurrentRecordingFile = recordFile;
+
+            return recordFile;
+        }
+
+        public void StopRecording()
+        {
+            var process = RecordingSessionStore.CurrentRecordingProcess;
+            if (process != null)
+            {
+                new RecordLocatoreService().StopAdbRecording(process);
+            }
+
+            // Optional cleanup
+            RecordingSessionStore.CurrentRecordingProcess = null;
         }
     }
+
 }

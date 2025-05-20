@@ -1,4 +1,5 @@
 ﻿using AiCompAutoBe.MobileTest.InitalMobile.InitialMobileService;
+using AiCompAutoBe.MobileTest.MobileTest.RecordAndPlay;
 using ComprehensiveAutomation.MobileTest.Inital;
 using ComprehensiveAutomation.Test.UiTest.MobileTest.MobileFlows;
 using ComprehensivePlayrightAuto.MobileTest.InitalMobile.InitialMobileService;
@@ -19,9 +20,9 @@ namespace ComprehensivePlayrightAuto.MobileTest.MobileTest.RecordAndPlay
              Category(TestLevel.Level_2)]
     public class CreateRecordFile
     {
-        public static string runingApp = "staging";
+        public static string runingApp = "calculator";
         public string deviceId = string.Empty;
-        public static string recordFileName = "recording";
+        public static string recordFileName = "zzzzzzz";
 
         [SetUp]
         public async Task _SetupMobile()
@@ -37,15 +38,21 @@ namespace ComprehensivePlayrightAuto.MobileTest.MobileTest.RecordAndPlay
             MobileBaseFlow mobileRecordFlow = new MobileBaseFlow(mobileRecordDriver.appiumDriver);
             #endregion
 
-            #region Get recording into file
-            RecordLocatoreService recordLocatoreService = new RecordLocatoreService();
+            var recordLocatoreService = new RecordLocatoreService();
             string recordFile = recordLocatoreService.CreateRecordFile(recordFileName);
 
-            Process recordProccess = recordLocatoreService.StartAdbRecordingToFile(recordFile);
+            Process recordProcess = recordLocatoreService.StartAdbRecordingToFile(recordFile);
 
-            Thread.Sleep(1000);
-            recordLocatoreService.StopAdbRecording(recordProccess);
-            #endregion
+            // ✅ Store for later use
+            RecordingSessionStore.CurrentRecordingProcess = recordProcess;
+
+            //here do somthing that i 
+            // Store the process globally
+            // RecordingSessionStore.CurrentRecordingProcess = recordProccess;
+
+            /*          StopRecordRun stopRecordRun = new StopRecordRun();
+                      await stopRecordRun._StopRecordRun();*/
         }
+
     }
 }
