@@ -13,7 +13,7 @@ namespace SafeCash.Test.ApiTest.InternalApiTest.Buyer
              string fullPageSource, string userInputView)
         {          
             OpenAiService openAiService = new OpenAiService();
-            string responceLocatorFromAi = await openAiService.GetClaudeResponse(
+            string responceLocatorFromAi = await openAiService.GrokRequestService(
                 $"Here is the full app XML source:," +
                 $"{fullPageSource}\n\n" +
                 $" I need to find the XPath locator for the button or input field for the next line>>: '\n"+
