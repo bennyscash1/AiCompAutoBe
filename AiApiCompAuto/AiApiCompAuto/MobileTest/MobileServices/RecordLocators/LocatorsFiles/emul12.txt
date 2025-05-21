@@ -1,0 +1,61 @@
+#SCREEN Physical size: 720x1280
+add device 1: /dev/input/event1
+  name:     "AT Translated Set 2 keyboard"
+add device 2: /dev/input/event0
+  name:     "Power Button"
+add device 3: /dev/input/event2
+  name:     "virtio_input_multi_touch_1"
+add device 4: /dev/input/event3
+  name:     "virtio_input_multi_touch_2"
+add device 5: /dev/input/event4
+  name:     "virtio_input_multi_touch_3"
+add device 6: /dev/input/event5
+  name:     "virtio_input_multi_touch_4"
+add device 7: /dev/input/event6
+  name:     "virtio_input_multi_touch_5"
+add device 8: /dev/input/event7
+  name:     "virtio_input_multi_touch_6"
+add device 9: /dev/input/event8
+  name:     "virtio_input_multi_touch_7"
+add device 10: /dev/input/event9
+  name:     "virtio_input_multi_touch_8"
+add device 11: /dev/input/event10
+  name:     "virtio_input_multi_touch_9"
+add device 12: /dev/input/event11
+  name:     "virtio_input_multi_touch_10"
+add device 13: /dev/input/event12
+  name:     "virtio_input_multi_touch_11"
+add device 14: /dev/input/event13
+  name:     "qwerty2"
+[     797.905322] /dev/input/event2: 0003 0039 00000000
+[     797.905322] /dev/input/event2: 0003 0035 000033bb
+[     797.905322] /dev/input/event2: 0003 0036 00004fcc
+[     797.905322] /dev/input/event2: 0003 003a 00000400
+[     797.905322] /dev/input/event2: 0000 0000 00000000
+[     798.122594] /dev/input/event2: 0003 003a 00000000
+[     798.122594] /dev/input/event2: 0003 0039 ffffffff
+[     798.122594] /dev/input/event2: 0000 0000 00000000
+[     800.104484] /dev/input/event2: 0003 0039 00000000
+[     800.104484] /dev/input/event2: 0003 0035 00006c9e
+[     800.104484] /dev/input/event2: 0003 0036 000064ff
+[     800.104484] /dev/input/event2: 0003 003a 00000400
+[     800.104484] /dev/input/event2: 0000 0000 00000000
+[     800.334284] /dev/input/event2: 0003 003a 00000000
+[     800.334284] /dev/input/event2: 0003 0039 ffffffff
+[     800.334284] /dev/input/event2: 0000 0000 00000000
+[     801.078623] /dev/input/event2: 0003 0039 00000000
+[     801.078623] /dev/input/event2: 0003 0035 000053bb
+[     801.078623] /dev/input/event2: 0003 0036 000057ff
+[     801.078623] /dev/input/event2: 0003 003a 00000400
+[     801.078623] /dev/input/event2: 0000 0000 00000000
+[     801.296732] /dev/input/event2: 0003 003a 00000000
+[     801.296732] /dev/input/event2: 0003 0039 ffffffff
+[     801.296732] /dev/input/event2: 0000 0000 00000000
+[     802.363603] /dev/input/event2: 0003 0039 00000000
+[     802.363603] /dev/input/event2: 0003 0035 00006e65
+[     802.363603] /dev/input/event2: 0003 0036 000076cb
+[     802.363603] /dev/input/event2: 0003 003a 00000400
+[     802.363603] /dev/input/event2: 0000 0000 00000000
+[     802.589253] /dev/input/event2: 0003 003a 00000000
+[     802.589253] /dev/input/event2: 0003 0039 ffffffff
+[     802.589253] /dev/input/event2: 0000 0000 00000000

@@ -28,7 +28,11 @@ namespace AiApiCompAuto.Controllers
                 RecordingSessionStore.CurrentRecordingProcess = null;
                 RecordingSessionStore.CurrentRecordingFile = null;
 
-                return Ok($"Recording stopped. File saved at: {file}");
+                return Ok(new
+                {
+                    status = "finished",
+                    message = $"The recording file was saved on path: '{file}'"
+                });
             }
             catch (Exception ex)
             {
