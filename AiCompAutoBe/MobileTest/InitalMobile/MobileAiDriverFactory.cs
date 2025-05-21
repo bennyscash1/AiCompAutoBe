@@ -31,7 +31,15 @@ namespace ComprehensiveAutomation.MobileTest.Inital
         {
             // Initialize the Appium driver
             (string appPackage, string appActivity) = InitAndroidAppByAppName(deviceId, appName).Result;
-            appiumDriver = InitAppiumDriver(appPackage, appActivity);
+            if (!string.IsNullOrEmpty(appPackage)|| !string.IsNullOrEmpty(appActivity))
+            {
+                appiumDriver = InitAppiumDriver(appPackage, appActivity);
+            }
+            else
+            {
+                Assert.That(appPackage, Is.Not.Null, $"App Package is empty {appPackage}");
+                Assert.That(appActivity, Is.Not.Null, $"App activitiy is empty {appActivity}");
+            }
         }
         public async Task <(string xx, string yy )> InitAndroidAppByAppName (string deviceId ,string appUserName)
         {
