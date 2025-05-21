@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using Microsoft.Extensions.Options;
 using NUnit.Framework;
+using SafeCash.Test.ApiTest.InternalApiTest.Buyer;
 
 namespace ComprehensiveAutomation.MobileTest.Inital
 {
@@ -21,28 +22,30 @@ namespace ComprehensiveAutomation.MobileTest.Inital
         public AndroidDriver appiumDriver;
         public static bool runOnRealDevice = true;
         public static bool toInstallApp = false;
-        private static bool retryInstallUiAutomator = true;
         public static string appiumPort = "4721";
         public static string baseAppiumUrl = $"http://127.0.0.1:{appiumPort}";
         public static string apiumUrlWithWd = "http://127.0.0.1:4718/wd/hub";
         private static string appUrl = "https://github.com/bennyscash1/ComprehensivePlayrightAuto/releases/download/publicCalculator/calculatorUpdated.apk";
-        public MobileAiDriverFactory(string deviceId, string appName)
+ 
+        public MobileAiDriverFactory(string deviceId ="", string appName ="")
         {
-            //Can take the app name from user hard code by next code
-            string allpackageList = GetMobileInstalledApps(deviceId);
-            string appPackage = GetAppPackageByName(deviceId, appName);
-            bool isAppListHaseAppPackage = IsAppPackageInTheMobileList(
-                allpackageList, appPackage);
-           Assert.That(isAppListHaseAppPackage,$"The app '{appName}' not found on the mobile app, the app package return {appPackage}");         
+            // Initialize the Appium driver
+            (string appPackage, string appActivity) = InitAndroidAppByAppName(deviceId, appName).Result;
+            appiumDriver = InitAppiumDriver(appPackage, appActivity);
+        }
+        public async Task <(string xx, string yy )> InitAndroidAppByAppName (string deviceId ,string appUserName)
+        {
+            /*        AndroidAiService androidAiService = new AndroidAiService();
+                    string allpackageList = GetMobileInstalledApps(deviceId);
+                    (string appPackage, string appActivity) = await androidAiService
+                        .GetAppPackageFromAi(allpackageList, appUserName);*/
+            string appPackage = GetAppPackageByName(deviceId, appUserName);
             string appActivity = GetAppMainActivity(deviceId, appPackage);
-           Assert.That(!string.IsNullOrEmpty(appActivity), $"The app activity for '{appName}' not found on the mobile app, the app package return {appPackage}");
-           appiumDriver = InitAppiumDriver(appPackage, appActivity);
-
-            //Or can take the app name from user> get the mobile brand and send it to ai 
-       }
+            return (appPackage, appActivity);
+        }
         private int retryCount = 0;
         private const int maxRetries = 4;
-        public AndroidDriver InitAppiumDriver(string appP = "", string appA = "")
+        public  AndroidDriver InitAppiumDriver(string appP = "", string appA = "")
         {
             try
             {
@@ -207,22 +210,30 @@ namespace ComprehensiveAutomation.MobileTest.Inital
             process.WaitForExit();
 
             var lines = output.Split('\n')
-                              .Select(line => line.Trim().Replace("package:", "").Trim())
-                              .Where(pkg => !string.IsNullOrWhiteSpace(pkg))
-                              .ToList();
+                .Select(line => line.Trim().Replace("package:", "").Trim())
+                .Where(pkg => !string.IsNullOrWhiteSpace(pkg))
+                .ToList();
 
-            // Try exact match first
-            var exactMatch = lines.FirstOrDefault(pkg => pkg.Equals(appName, StringComparison.OrdinalIgnoreCase));
-            if (!string.IsNullOrEmpty(exactMatch))
-                return exactMatch;
+            var candidates = lines
+                .Where(pkg => pkg.Contains(appName, StringComparison.OrdinalIgnoreCase))
+                .ToList();
 
-            // Then try packages that end with ".appname" or contain ".appname"
-            var smartMatch = lines.FirstOrDefault(pkg =>
-                pkg.EndsWith("." + appName, StringComparison.OrdinalIgnoreCase) ||
-                pkg.Contains("." + appName + ".", StringComparison.OrdinalIgnoreCase));
+            if (!candidates.Any())
+                return null;
 
-            return smartMatch;
+            // Prioritize smartly
+            var preferred = candidates
+                .OrderBy(pkg =>
+                    pkg.StartsWith("com.google.") ? 0 :
+                    pkg.StartsWith("com.sec.") || pkg.StartsWith("com.samsung.") ? 1 :
+                    pkg.StartsWith("com.android.") ? 3 : 2)
+                .ThenBy(pkg => pkg.Length)
+                .First();
+
+            return preferred;
         }
+
+
 
         public string GetAppMainActivity(string deviceId, string appPackage)
         {

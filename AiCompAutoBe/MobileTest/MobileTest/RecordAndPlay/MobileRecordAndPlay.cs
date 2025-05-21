@@ -19,19 +19,22 @@ namespace ComprehensivePlayrightAuto.MobileTest.MobileTest.RecordAndPlay
         Category(TestLevel.Level_1)]
     public class MobileRecordAndPlay
     {
-        static string runingApp = "Calculator";
+        static string runingApp = "bank";
         public string deviceId = string.Empty;
         [SetUp]
         public async Task SetupMobileRecodr()
         {
+
             deviceId = await new InitialDeviceServices()
                 .PrepareTheDeviceToReadyForRun(runingApp);
+            
         }
         [Test]
         public async Task _MobileRecordAndPlay()
         {
             #region Open recording session
             MobileAiDriverFactory mobileRecordDriver = new MobileAiDriverFactory(deviceId, runingApp);
+            //await mobileRecordDriver.InitAndroidAppByAppName(deviceId, runingApp);
             MobileBaseFlow mobileRecordFlow = new MobileBaseFlow(mobileRecordDriver.appiumDriver);
             #endregion
 
@@ -47,6 +50,7 @@ namespace ComprehensivePlayrightAuto.MobileTest.MobileTest.RecordAndPlay
 
             #region Get touch coordinates
             MobileAiDriverFactory mobileRecordDriverx = new MobileAiDriverFactory(deviceId, runingApp);
+
             MobileBaseFlow mobileRecordFlowx = new MobileBaseFlow(mobileRecordDriverx.appiumDriver);
 
             await mobileRecordFlowx.ClickOnXyUsingFile(recordFile);

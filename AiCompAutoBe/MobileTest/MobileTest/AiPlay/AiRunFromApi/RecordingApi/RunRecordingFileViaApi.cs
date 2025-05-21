@@ -28,7 +28,8 @@ namespace AiCompAutoBe.MobileTest.MobileTest.AiPlay.AiRunFromApi.RecordingApi
                 .PrepareTheDeviceToReadyForRun(runingApp,
                 EmulatorEnumList.Small_Phone_API_35.ToString());
 
-            MobileAiDriverFactory mobileDriver = new MobileAiDriverFactory(deviceId, runingApp);
+            MobileAiDriverFactory mobileDriver = new MobileAiDriverFactory();
+            await mobileDriver.InitAndroidAppByAppName(deviceId, runingApp);
             MobileAiTaskFlow mobileFlow = new MobileAiTaskFlow(mobileDriver.appiumDriver);
 
             #region Get recording into file

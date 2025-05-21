@@ -26,7 +26,9 @@ namespace AiCompAutoBe.MobileTest.MobileTest.AiPlay.AiRunFromApi.RecordingApi
             string deviceId = await new InitialDeviceServices()
                 .PrepareTheDeviceToReadyForRun(runingApp, EmulatorEnumList.Small_Phone_API_35.ToString());
 
-            MobileAiDriverFactory mobileDriver = new MobileAiDriverFactory(deviceId, runingApp);
+            MobileAiDriverFactory mobileDriver = new MobileAiDriverFactory();
+            await mobileDriver.InitAndroidAppByAppName(deviceId, runingApp);
+
             MobileAiTaskFlow mobileFlow = new MobileAiTaskFlow(mobileDriver.appiumDriver);
 
             RecordLocatoreService recordLocatoreService = new RecordLocatoreService();

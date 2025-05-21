@@ -27,7 +27,8 @@ namespace ComprehensivePlayrightAuto.MobileTest.MobileTest.AiPlay
             deviceId = await new InitialDeviceServices()
              .PrepareTheDeviceToReadyForRun(appRuningName);
 
-            MobileAiDriverFactory mobileDriver = new MobileAiDriverFactory(deviceId, appRuningName);
+            MobileAiDriverFactory mobileDriver = new MobileAiDriverFactory();
+            await mobileDriver.InitAndroidAppByAppName(deviceId, appRuningName);
             MobileBaseFlow mobileFlow = new MobileBaseFlow(mobileDriver.appiumDriver);
 
             //Click on app buttons

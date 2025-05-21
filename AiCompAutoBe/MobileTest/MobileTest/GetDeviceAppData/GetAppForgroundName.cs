@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using static ComprehensiveAutomation.Test.Infra.BaseTest.EnumList;
 using static ComprehensivePlayrightAuto.MobileTest.InitalMobile.InitialMobileService.MobileEmulatorMenegar;
 
-namespace AiCompAutoBe.MobileTest.MobileTest
+namespace AiCompAutoBe.MobileTest.MobileTest.GetDeviceAppData
 {
     [TestFixture, Category(
             Categories.MobileAiRun),
@@ -17,12 +17,12 @@ namespace AiCompAutoBe.MobileTest.MobileTest
     public class GetAppForgroundName
     {
         [Test]
-        public async Task <string>_GetAppForgroundName()
+        public async Task<string> _GetAppForgroundName()
         {
             string deviceId = new MobileEmulatorMenegar()
              .EnsureDeviceIsRunning(EmulatorEnumList
              .Small_Phone_API_35.ToString());
-            string appForground  = GetForegroundAppName();
+            string appForground = GetForegroundAppName();
             return $"The device id: '{deviceId}',  Runing app name: '{appForground}'";
         }
     }

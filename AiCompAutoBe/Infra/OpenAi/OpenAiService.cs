@@ -17,7 +17,8 @@ namespace SafeCash.Test.ApiTest.Integration.OpenAi
             MobileTextInpueRequest,
             MobileSystemPromptMissionTask,
             MobileXyCordinateRequest,
-            ImagesCompare
+            ImagesCompare,
+            AppPackageDetails,
         }
         string mobilePrePrompt = "You are an automation expert.\n" +
             "Given a mobile XML element dump, return only the XPath of the button or element best matching the target.\n\n" +
@@ -111,6 +112,35 @@ namespace SafeCash.Test.ApiTest.Integration.OpenAi
              "- Do not return suggestions for extra UI elements if not part of the userGoal.\n";
 
 
+        string getAppPackageDetailsSystemPrompt =
+      @"You are an Android expert.
+        Your task is to extract the appPackage and appActivity for a specific app name (e.g., 'camera' or 'contacts').
+
+        You will receive:
+        - A list of installed app packages
+        - A target app name
+
+        ---
+
+        Your job is to:
+        1. Find the app package that best matches the target app name (case-insensitive, partial match is allowed).
+        2. Return a valid JSON in this exact format:
+        {
+            ""appPackage"": ""<appPackage>"",
+            ""appActivity"": ""<appActivity>""
+        }
+
+        ---
+
+        Rules:
+        - Respond with JSON only. No explanation, no extra text.
+        - If multiple packages might match, return the best/most likely one.
+        - If no match found, still return the JSON with empty values:
+        {
+            ""appPackage"": """",
+            ""appActivity"": """"
+        }
+        ";
 
         public string GetSystemPrompt(SystemPromptTypeEnum aiRequest)
         {
@@ -125,6 +155,9 @@ namespace SafeCash.Test.ApiTest.Integration.OpenAi
                     break;
                 case SystemPromptTypeEnum.MobileXyCordinateRequest:
                     prePrompt = mobilePrePromptCordinateXy;
+                    break;
+                case SystemPromptTypeEnum.AppPackageDetails:
+                    prePrompt = getAppPackageDetailsSystemPrompt;
                     break;
 
                 default:

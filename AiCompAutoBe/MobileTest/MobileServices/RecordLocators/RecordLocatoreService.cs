@@ -238,15 +238,28 @@ namespace ComprehensivePlayrightAuto.MobileTest.MobileServices.RecordLocators
                 {
                     int scaledX = rawX.Value * currentWidth / maxRaw;
                     int scaledY = rawY.Value * currentHeight / maxRaw;
+
+                    (scaledX, scaledY) = AddSmallRandomOffset(scaledX, scaledY);
+
                     coordinates.Add((scaledX, scaledY));
                     rawX = rawY = null;
                     coordinateCaptured = true;
                 }
+
             }
 
             return coordinates;
         }
 
+
+        private static Random _rand = new Random();
+
+        private static (int x, int y) AddSmallRandomOffset(int x, int y)
+        {
+            // רק מוסיף 0 או 1 לפיקסל ב-X
+            int offsetX = _rand.Next(0, 2); // 0 או 1
+            return (x + offsetX, y);        // y נשאר זהה
+        }
 
 
 

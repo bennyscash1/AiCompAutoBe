@@ -26,7 +26,8 @@ namespace ComprehensivePlayrightAuto.MobileTest.MobileTest.AiPlay
             string deviceId = await new InitialDeviceServices()
                 .PrepareTheDeviceToReadyForRun(runingApp);
 
-            MobileAiDriverFactory mobileDriver = new MobileAiDriverFactory(deviceId, runingApp);
+            MobileAiDriverFactory mobileDriver = new MobileAiDriverFactory();
+            await mobileDriver.InitAndroidAppByAppName(deviceId, runingApp);
             MobileBaseFlow mobileFlow = new MobileBaseFlow(mobileDriver.appiumDriver);
 
             #region Run the step from file

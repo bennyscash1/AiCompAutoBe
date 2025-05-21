@@ -167,7 +167,24 @@ namespace SafeCash.Test.ApiTest.InternalApiTest.Buyer
         }
 
         #endregion
+        public async Task <(string appPackage, string appActivity)> GetAppPackageFromAi(string allAppList, string appName)
+        {
+            OpenAiService openAiService = new OpenAiService();
+            string appPackageResponceAi = await openAiService.GrokRequestService(
+                $"App list:\n{allAppList}\n\n" +
+                $"Target app: '{appName}' \n" +
+                $"Return only this JSON:\n" +
+                $"{{\n  \"appPackage\": \"<appPackage>\",\n  \"appActivity\": \"<appActivity>\"\n}}",
+                OpenAiService.SystemPromptTypeEnum.AppPackageDetails);
 
+            // Parse JSON
+            using JsonDocument doc = JsonDocument.Parse(appPackageResponceAi);
+            string? appPackage = doc.RootElement.GetProperty("appPackage").GetString();
+            string? appActivity = doc.RootElement.GetProperty("appActivity").GetString();
+            Assert.That(appPackage != null, "appPackage return null");
+            Assert.That(appActivity != null, "appActivity return null");
+            return (appPackage, appActivity);
+        }
     }
 }
 

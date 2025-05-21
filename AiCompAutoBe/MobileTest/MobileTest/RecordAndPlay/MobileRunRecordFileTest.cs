@@ -31,7 +31,8 @@ namespace ComprehensivePlayrightAuto.MobileTest.MobileTest.RecordAndPlay
         public async Task _MobileRunRecordFileTest()
         {
             #region Open recording session
-            MobileAiDriverFactory mobileRecordDriver = new MobileAiDriverFactory(deviceId, runingApp);
+            MobileAiDriverFactory mobileRecordDriver = new MobileAiDriverFactory();
+            await mobileRecordDriver.InitAndroidAppByAppName(deviceId, runingApp);
             MobileBaseFlow mobileRecordFlow = new MobileBaseFlow(mobileRecordDriver.appiumDriver);
             #endregion
 
