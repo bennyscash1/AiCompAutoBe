@@ -31,7 +31,7 @@ namespace ComprehensiveAutomation.MobileTest.Inital
         {
             // Initialize the Appium driver
             (string appPackage, string appActivity) = InitAndroidAppByAppName(deviceId, appName).Result;
-            if (!string.IsNullOrEmpty(appPackage)|| !string.IsNullOrEmpty(appActivity))
+            if (!string.IsNullOrEmpty(appPackage)&&!string.IsNullOrEmpty(appActivity))
             {
                 appiumDriver = InitAppiumDriver(appPackage, appActivity);
             }
@@ -217,28 +217,33 @@ namespace ComprehensiveAutomation.MobileTest.Inital
             string output = process.StandardOutput.ReadToEnd();
             process.WaitForExit();
 
-            var lines = output.Split('\n')
+            var packages = output.Split('\n')
                 .Select(line => line.Trim().Replace("package:", "").Trim())
                 .Where(pkg => !string.IsNullOrWhiteSpace(pkg))
                 .ToList();
 
-            var candidates = lines
+            // 1. Try to return exact match
+            var exactMatch = packages.FirstOrDefault(pkg =>
+                pkg.Equals(appName, StringComparison.OrdinalIgnoreCase));
+            if (exactMatch != null)
+                return exactMatch;
+
+            // 2. Prioritize known Chrome package
+            var chrome = packages.FirstOrDefault(pkg => pkg == "com.android.chrome");
+            if (chrome != null)
+                return chrome;
+
+            // 3. Fallback: smart substring matching with better scoring
+            var candidates = packages
                 .Where(pkg => pkg.Contains(appName, StringComparison.OrdinalIgnoreCase))
-                .ToList();
-
-            if (!candidates.Any())
-                return null;
-
-            // Prioritize smartly
-            var preferred = candidates
                 .OrderBy(pkg =>
                     pkg.StartsWith("com.google.") ? 0 :
-                    pkg.StartsWith("com.sec.") || pkg.StartsWith("com.samsung.") ? 1 :
-                    pkg.StartsWith("com.android.") ? 3 : 2)
+                    pkg.StartsWith("com.android.") ? 1 :
+                    pkg.StartsWith("com.sec.") || pkg.StartsWith("com.samsung.") ? 2 : 3)
                 .ThenBy(pkg => pkg.Length)
-                .First();
+                .ToList();
 
-            return preferred;
+            return candidates.FirstOrDefault();
         }
 
 
