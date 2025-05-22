@@ -222,18 +222,24 @@ namespace ComprehensiveAutomation.MobileTest.Inital
                 .Where(pkg => !string.IsNullOrWhiteSpace(pkg))
                 .ToList();
 
-            // 1. Try to return exact match
+            // 1. Try to return exact match (case-insensitive)
             var exactMatch = packages.FirstOrDefault(pkg =>
                 pkg.Equals(appName, StringComparison.OrdinalIgnoreCase));
             if (exactMatch != null)
                 return exactMatch;
 
-            // 2. Prioritize known Chrome package
+            // 2. Try to return a package that ends with the appName (case-insensitive)
+            var endsWithMatch = packages.FirstOrDefault(pkg =>
+                pkg.EndsWith(appName, StringComparison.OrdinalIgnoreCase));
+            if (endsWithMatch != null)
+                return endsWithMatch;
+
+            // 3. Prioritize known Chrome package (as a secondary option if no end-with match)
             var chrome = packages.FirstOrDefault(pkg => pkg == "com.android.chrome");
-            if (chrome != null)
+            if (chrome != null && string.IsNullOrEmpty(endsWithMatch))
                 return chrome;
 
-            // 3. Fallback: smart substring matching with better scoring
+            // 4. Fallback: smart substring matching with better scoring
             var candidates = packages
                 .Where(pkg => pkg.Contains(appName, StringComparison.OrdinalIgnoreCase))
                 .OrderBy(pkg =>
