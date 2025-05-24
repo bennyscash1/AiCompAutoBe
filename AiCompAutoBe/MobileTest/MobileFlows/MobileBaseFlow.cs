@@ -19,11 +19,13 @@ namespace ComprehensiveAutomation.Test.UiTest.MobileTest.MobileFlows
     {
         public AndroidDriver appiumDriver;
         MobileBasePages mobileBasePages;
+        MobileLoginPage mobileLoginPage;
 
         public MobileBaseFlow(AndroidDriver i_driver)
         {
             appiumDriver = i_driver;
             mobileBasePages = new MobileBasePages(i_driver);
+            mobileLoginPage = new MobileLoginPage(i_driver);
         }
 
         public string GetFullPageSource()
@@ -129,6 +131,15 @@ namespace ComprehensiveAutomation.Test.UiTest.MobileTest.MobileFlows
         }
         #endregion
         #endregion
-
+        public MobileBaseFlow InitChromeToSearch(bool i_navigateToLogonScreen = true, string i_url = null)
+        {
+            mobileLoginPage
+                .ClickOnUseNoAccount()
+               .GeneralScrollDown()
+                .ClickOnGotItButton();
+            if (i_navigateToLogonScreen)
+                appiumDriver.Navigate().GoToUrl(i_url);
+            return this;
+        }
     }
 }

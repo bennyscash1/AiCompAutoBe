@@ -29,10 +29,14 @@ namespace AiCompAutoBe.MobileTest.MobileTest.AiPlay.AiRunFromApi.RunAiFromApi
                 .PrepareTheDeviceToReadyForRun(runingApp,
                 EmulatorEnumList.Pixel_2_API_35.ToString());
 
-            MobileAiDriverFactory mobileDriver = new MobileAiDriverFactory();
-            await mobileDriver.InitAndroidAppByAppName(deviceId, runingApp);
+            MobileAiDriverFactory mobileDriver = new MobileAiDriverFactory(deviceId, runingApp);
+            //await mobileDriver.InitAndroidAppByAppName(deviceId, runingApp);
             //MobileAiTaskFlow mobileFlow = new MobileAiTaskFlow(mobileDriver.appiumDriver);
-
+            if (runingApp =="chrome")
+            {
+                var mobileTaskFlow = new MobileAiTaskFlow(mobileDriver.appiumDriver);
+                mobileTaskFlow.InitChromeToSearch(false);
+            }
             #region Get the ai task 
             if (taskSteps != null && taskSteps.Any())
             {

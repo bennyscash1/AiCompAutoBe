@@ -50,5 +50,41 @@ namespace ComprehensiveAutomation.Test.UiTest.MobileTest.MobilePageObject
             MobileClickElement(m_number);
             return this;
         }
+
+
+        #region Init chrome to login page
+
+        private By m_useWithNoAccount = By.Id("com.android.chrome:id/signin_fre_dismiss_button");
+        private By m_IGotItButton = By.XPath("//android.widget.Button[@resource-id=\"com.android.chrome:id/ack_button\"]");
+
+        public MobileLoginPage ClickOnUseNoAccount()
+        {
+            MobileClickElement(m_useWithNoAccount);
+            return this;
+        }
+        public MobileLoginPage GeneralScrollDown()
+        {
+            var touch = new PointerInputDevice(PointerKind.Touch);
+            var sequence = new ActionSequence(touch, 0);
+
+            sequence.AddAction(touch.CreatePointerMove(CoordinateOrigin.Viewport, 500, 1800, TimeSpan.Zero));
+            sequence.AddAction(touch.CreatePointerDown(0));
+            sequence.AddAction(touch.CreatePause(TimeSpan.FromMilliseconds(300)));
+            sequence.AddAction(touch.CreatePointerMove(CoordinateOrigin.Viewport, 500, 100, TimeSpan.FromMilliseconds(1000)));
+            sequence.AddAction(touch.CreatePointerUp(0));
+            Thread.Sleep(1500); // or Task.Delay(1000).Wait();
+
+            appiumChromeDriver.PerformActions(new List<ActionSequence> { sequence });
+            Thread.Sleep(1500); // or Task.Delay(1000).Wait();
+
+            return this;
+        }
+        public MobileLoginPage ClickOnGotItButton()
+        {
+            MobileClickElement(m_IGotItButton);
+
+            return this;
+        }
+        #endregion
     }
 }
