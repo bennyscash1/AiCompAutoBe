@@ -33,7 +33,9 @@ namespace AiCompAutoBe.MobileTest.MobileTest.AiPlay
             MobileAiTaskFlow mobileFlow = new MobileAiTaskFlow(mobileDriver.appiumDriver);
 
             //Click on app buttons
-            mobileFlow.InitChromeToSearch(true, "https://recaptcha-demo.appspot.com/recaptcha-v2-checkbox.php");
+            mobileFlow.InitChromeToSearch(true, 
+                "https://recaptcha-demo.appspot.com/recaptcha-v2-checkbox.php");
+
             int aiResponceType = await mobileFlow.HandleAiTaskMission(
                    "Click on the checbox 'i'm not a robot'");      
             await mobileFlow.TalkWithApp("Click on number 9");
