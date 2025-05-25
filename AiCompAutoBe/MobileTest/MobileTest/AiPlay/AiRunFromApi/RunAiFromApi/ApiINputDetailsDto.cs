@@ -11,6 +11,7 @@ namespace AiCompAutoBe.MobileTest.MobileTest.AiPlay.AiRunFromApi.RunAiFromApi
     public class TestInputData
     {
         public string RuningApp { get; set; }
+        public string UrlForChrome { get; set; }="";
         public List<AiTasksList>? AiTasksList { get; set; }
 
         public List<StepInstruction>? TestInputSteps { get; set; }

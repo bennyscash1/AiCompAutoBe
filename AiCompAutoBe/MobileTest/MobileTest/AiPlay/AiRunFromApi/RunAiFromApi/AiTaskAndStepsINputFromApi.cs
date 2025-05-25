@@ -23,7 +23,7 @@ namespace AiCompAutoBe.MobileTest.MobileTest.AiPlay.AiRunFromApi.RunAiFromApi
     {
 
         [Test]
-        public async Task _AiTaskAndStepsINputFromApi(string runingApp, List<AiTasksList> taskSteps, List<StepInstruction> steps)
+        public async Task _AiTaskAndStepsINputFromApi(string runingApp, List<AiTasksList> taskSteps, List<StepInstruction> steps, string urlChrome ="")
         {
             string deviceId = await new InitialDeviceServices()
                 .PrepareTheDeviceToReadyForRun(runingApp,
@@ -35,7 +35,14 @@ namespace AiCompAutoBe.MobileTest.MobileTest.AiPlay.AiRunFromApi.RunAiFromApi
             if (runingApp =="chrome")
             {
                 var mobileTaskFlow = new MobileAiTaskFlow(mobileDriver.appiumDriver);
-                mobileTaskFlow.InitChromeToSearch(false);
+                if (string.IsNullOrEmpty(urlChrome))
+                {
+                    mobileTaskFlow.InitChromeToSearch(false);
+                }
+                else
+                {
+                    mobileTaskFlow.InitChromeToSearch(true, urlChrome);
+                }
             }
             #region Get the ai task 
             if (taskSteps != null && taskSteps.Any())

@@ -15,9 +15,10 @@ namespace AiApiCompAuto.Controllers
             {
                 var runingService = new AiTaskAndStepsINputFromApi();
                 await runingService._AiTaskAndStepsINputFromApi(
-                    requestData.RuningApp,
+                    requestData.RuningApp,           
                     requestData.AiTasksList,
-                    requestData.TestInputSteps);
+                    requestData.TestInputSteps,
+                    requestData.UrlForChrome);
                 return Ok(new
                 {
                     status = "finished",
