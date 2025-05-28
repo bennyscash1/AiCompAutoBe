@@ -9,3 +9,5 @@ obj/
 TestResults/
 # Ignore local mobile tools (Appium/Emulator)
 **/MobileTools/
+**/RecordLocators/LocatorsFiles/
+
