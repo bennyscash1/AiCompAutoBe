@@ -284,6 +284,7 @@ namespace SafeCash.Test.ApiTest.Integration.OpenAi
                 {
                 new { role = "system", content = prePrompt },
                 new { role = "user", content = userPrompts }
+
             },
                 stream = false
             };
