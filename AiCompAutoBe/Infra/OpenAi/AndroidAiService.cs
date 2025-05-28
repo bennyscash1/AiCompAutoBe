@@ -9,29 +9,37 @@ namespace SafeCash.Test.ApiTest.InternalApiTest.Buyer
 {
     public class AndroidAiService 
     {
-         public async Task <string> GetAndroidSingleLocatorFromUserTextInput(
-             string fullPageSource, string userInputView)
-        {          
+        public async Task<string> GetAndroidSingleLocatorFromUserTextInput(
+      string fullPageSource, string userInputView, AiServicesList aiService = AiServicesList.Grok)
+        {
             OpenAiService openAiService = new OpenAiService();
-            string responceLocatorFromAi = await openAiService.GrokRequestService(
-                $"Here is the full app XML source:," +
-                $"{fullPageSource}\n\n" +
-                $" I need to find the XPath locator for the button or input field for the next line>>: '\n"+
-                $"{userInputView}'\n\n"+
-                $"Please return only xpath without any other text",
-                OpenAiService.SystemPromptTypeEnum.MobileTextInpueRequest);
-           bool isLocatorValid = AndroidAiService.isLocatorValid(responceLocatorFromAi);
-            if (isLocatorValid)
+
+            string userPrompt = $"Here is the full app XML source:\n" +
+                                $"{fullPageSource}\n\n" +
+                                $"I need to find the XPath locator for the button or input field for the next line>>:\n" +
+                                $"'{userInputView}'\n\n" +
+                                $"Please return only xpath without any other text";
+
+            string responseLocatorFromAi = aiService switch
             {
-                return responceLocatorFromAi;
+                AiServicesList.OpenAi => await openAiService.OpenAiServiceRequest(userPrompt, OpenAiService.SystemPromptTypeEnum.MobileTextInpueRequest),
+                AiServicesList.Grok => await openAiService.GrokRequestService(userPrompt, OpenAiService.SystemPromptTypeEnum.MobileTextInpueRequest),
+                AiServicesList.Claude => await openAiService.GetClaudeResponse(userPrompt, OpenAiService.SystemPromptTypeEnum.MobileTextInpueRequest),
+                AiServicesList.DeepSeek => await openAiService.DeepSeekResponceAi(userPrompt, OpenAiService.SystemPromptTypeEnum.MobileTextInpueRequest),
+                _ => string.Empty
+            };
+
+            if (AndroidAiService.isLocatorValid(responseLocatorFromAi))
+            {
+                return responseLocatorFromAi;
             }
             else
             {
-                // If the locator is not valid, you can handle it here
-                Console.WriteLine($"Invalid XPath locator: {responceLocatorFromAi}");
-                return string.Empty; // or throw an exception, or return a default value
-            }   
+                Console.WriteLine($"Invalid XPath locator: {responseLocatorFromAi}");
+                return string.Empty;
+            }
         }
+
         public async Task<string> GetAndroidLocatorFromUserXyCordinate(
             string fullPageSource, int x, int y, string screenSize)
         {

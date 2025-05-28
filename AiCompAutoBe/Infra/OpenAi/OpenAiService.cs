@@ -374,4 +374,11 @@ namespace SafeCash.Test.ApiTest.Integration.OpenAi
 
         #endregion
     }
+    public enum AiServicesList
+    {
+        OpenAi,
+        Grok,
+        Claude,
+        DeepSeek
+    }
 }
