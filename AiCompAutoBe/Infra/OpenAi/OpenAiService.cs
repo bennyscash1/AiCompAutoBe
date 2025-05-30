@@ -323,8 +323,8 @@ namespace SafeCash.Test.ApiTest.Integration.OpenAi
             string prePrompt = GetSystemPrompt(aiRequest);
             if (string.IsNullOrEmpty(apiKey))
             {
-                //apiKey = Environment.GetEnvironmentVariable("CLAUDE_API_KEY") ?? throw new InvalidOperationException("API key is missing from environment variables.");
-                throw new InvalidOperationException("API key is missing. Please provide a valid API key for Claude AI.");
+               // apiKey = Environment.GetEnvironmentVariable("CLAUDE_API_KEY") ?? throw new InvalidOperationException("API key is missing from environment variables.");
+               // throw new InvalidOperationException("API key is missing. Please provide a valid API key for Claude AI.");
             }
             string url = "https://api.anthropic.com/v1/messages";
             string claudeModel = "claude-3-5-sonnet-20240620";
@@ -348,7 +348,9 @@ namespace SafeCash.Test.ApiTest.Integration.OpenAi
 
             if (!response.IsSuccessStatusCode)
             {
-                return $"Error: {response.StatusCode}\n{responseContent}";
+                throw new InvalidOperationException($"API key is incorrect (Anthropic return http status {response.StatusCode},  {responseContent}). " +
+                    $"Please provide a valid API key for Claude AI.");
+                //return $"Error: {response.StatusCode}\n{responseContent}";
             }
 
             JObject parsed = JObject.Parse(responseContent);

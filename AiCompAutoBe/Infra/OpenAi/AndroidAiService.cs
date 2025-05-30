@@ -19,10 +19,11 @@ namespace SafeCash.Test.ApiTest.InternalApiTest.Buyer
                                 $"I need to find the XPath locator for the button or input field for the next line>>:\n" +
                                 $"'{userInputView}'\n\n" +
                                 $"Please return only xpath without any other text";
-
+            //If you change it from claude to other, just remove the api key
             string responseLocatorFromAi = await openAiService.
-                GetClaudeResponse(userPrompt, OpenAiService
-                .SystemPromptTypeEnum.MobileTextInpueRequest, apiKey);
+                GrokRequestService(userPrompt, OpenAiService
+                .SystemPromptTypeEnum.MobileTextInpueRequest //, apiKey
+                );
    
             if (AndroidAiService.isLocatorValid(responseLocatorFromAi))
             {
@@ -111,9 +112,9 @@ namespace SafeCash.Test.ApiTest.InternalApiTest.Buyer
                         "If the task is already complete, return only { \"type\": 3 }.";
                 }
                 //If you change it from claude to other, just remove the api key
-                lastResponse = await openAiService.GetClaudeResponse(
+                lastResponse = await openAiService.GrokRequestService(
                     userPrompt,
-                    OpenAiService.SystemPromptTypeEnum.MobileSystemPromptMissionTask  ,apiKey
+                    OpenAiService.SystemPromptTypeEnum.MobileSystemPromptMissionTask  //,apiKey
                 );
 
                 if (IsAiReturnValidJson(lastResponse, out var cleanJson))
