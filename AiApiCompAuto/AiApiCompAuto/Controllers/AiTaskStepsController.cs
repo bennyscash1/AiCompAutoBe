@@ -18,7 +18,8 @@ namespace AiApiCompAuto.Controllers
                     requestData.RuningApp,           
                     requestData.AiTasksList,
                     requestData.TestInputSteps,
-                    requestData.UrlForChrome);
+                    requestData.UrlForChrome, 
+                    requestData.AnthropicKey);
                 return Ok(new
                 {
                     status = "finished",

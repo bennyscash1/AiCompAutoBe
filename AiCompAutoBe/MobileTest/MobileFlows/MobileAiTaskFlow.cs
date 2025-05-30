@@ -24,7 +24,7 @@ namespace AiCompAutoBe.MobileTest.MobileFlows
             mobileDriverLocator = new MobileLoginPage(appiumDriver);
 
         }
-        public async Task<int> HandleAiTaskMission(string userGoalMission)
+        public async Task<int> HandleAiTaskMission(string userGoalMission, string apiKey="")
         {
             var aiService = new AndroidAiService();
             int aiResponceType = (int)aiResponceTypeEnum.ButtonLocator;
@@ -43,11 +43,12 @@ namespace AiCompAutoBe.MobileTest.MobileFlows
                       userGoalMission,
                       "Update: Here is a list of locators that have already been clicked.\n" +
                       $"{listThatWeClickBefore}\n" +
-                      "Do not return or suggest any of them again!!");
+                      "Do not return or suggest any of them again!!",
+                      apiKey: apiKey);
                 }
                 else
                 {
-                    jsonAiResponed = await aiService.GetAiResponedTaskAsJson(fullPageSource, userGoalMission);
+                    jsonAiResponed = await aiService.GetAiResponedTaskAsJson(fullPageSource, userGoalMission, apiKey: apiKey);
                 }
 
                 aiResponceType = GetTypeFromJson(jsonAiResponed);

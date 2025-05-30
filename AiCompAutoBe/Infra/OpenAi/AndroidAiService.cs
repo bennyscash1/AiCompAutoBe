@@ -10,7 +10,7 @@ namespace SafeCash.Test.ApiTest.InternalApiTest.Buyer
     public class AndroidAiService 
     {
         public async Task<string> GetAndroidSingleLocatorFromUserTextInput(
-      string fullPageSource, string userInputView, AiServicesList aiService = AiServicesList.Grok)
+        string fullPageSource, string userInputView, string apiKey = "")
         {
             OpenAiService openAiService = new OpenAiService();
 
@@ -20,15 +20,10 @@ namespace SafeCash.Test.ApiTest.InternalApiTest.Buyer
                                 $"'{userInputView}'\n\n" +
                                 $"Please return only xpath without any other text";
 
-            string responseLocatorFromAi = aiService switch
-            {
-                AiServicesList.OpenAi => await openAiService.OpenAiServiceRequest(userPrompt, OpenAiService.SystemPromptTypeEnum.MobileTextInpueRequest),
-                AiServicesList.Grok => await openAiService.GrokRequestService(userPrompt, OpenAiService.SystemPromptTypeEnum.MobileTextInpueRequest),
-                AiServicesList.Claude => await openAiService.GetClaudeResponse(userPrompt, OpenAiService.SystemPromptTypeEnum.MobileTextInpueRequest),
-                AiServicesList.DeepSeek => await openAiService.DeepSeekResponceAi(userPrompt, OpenAiService.SystemPromptTypeEnum.MobileTextInpueRequest),
-                _ => string.Empty
-            };
-
+            string responseLocatorFromAi = await openAiService.
+                GetClaudeResponse(userPrompt, OpenAiService
+                .SystemPromptTypeEnum.MobileTextInpueRequest, apiKey);
+   
             if (AndroidAiService.isLocatorValid(responseLocatorFromAi))
             {
                 return responseLocatorFromAi;
@@ -92,7 +87,7 @@ namespace SafeCash.Test.ApiTest.InternalApiTest.Buyer
 
         #region Ai service for API tasks 
         public async Task<string> GetAiResponedTaskAsJson(
-          string fullPageSource, string userEndGoalMission, string userUpdateOnFailedScenario = "")
+          string fullPageSource, string userEndGoalMission, string userUpdateOnFailedScenario = "", string apiKey="")
         {
             OpenAiService openAiService = new OpenAiService();
             string lastResponse = string.Empty;
@@ -115,10 +110,10 @@ namespace SafeCash.Test.ApiTest.InternalApiTest.Buyer
                         "- { \"type\": 0 }\n\n" +
                         "If the task is already complete, return only { \"type\": 3 }.";
                 }
-
+                //If you change it from claude to other, just remove the api key
                 lastResponse = await openAiService.GetClaudeResponse(
                     userPrompt,
-                    OpenAiService.SystemPromptTypeEnum.MobileSystemPromptMissionTask
+                    OpenAiService.SystemPromptTypeEnum.MobileSystemPromptMissionTask  ,apiKey
                 );
 
                 if (IsAiReturnValidJson(lastResponse, out var cleanJson))

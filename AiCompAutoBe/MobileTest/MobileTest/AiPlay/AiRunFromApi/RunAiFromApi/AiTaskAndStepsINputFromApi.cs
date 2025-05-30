@@ -23,7 +23,9 @@ namespace AiCompAutoBe.MobileTest.MobileTest.AiPlay.AiRunFromApi.RunAiFromApi
     {
 
         [Test]
-        public async Task _AiTaskAndStepsINputFromApi(string runingApp, List<AiTasksList> taskSteps, List<StepInstruction> steps, string urlChrome ="")
+        public async Task _AiTaskAndStepsINputFromApi(string runingApp,  
+            List<AiTasksList> taskSteps, List<StepInstruction> steps,
+            string urlChrome ="", string apiKey ="")
         {
             string deviceId = await new InitialDeviceServices()
                 .PrepareTheDeviceToReadyForRun(runingApp,
@@ -45,12 +47,12 @@ namespace AiCompAutoBe.MobileTest.MobileTest.AiPlay.AiRunFromApi.RunAiFromApi
                 }
             }
             #region Get the ai task 
-            if (taskSteps != null && taskSteps.Any())
+            if (taskSteps != null && taskSteps.Any(ts => !string.IsNullOrWhiteSpace(ts.TaskStep)))
             {
                 foreach (var taskStep in taskSteps)
                 {
                     var mobileTaskFlow = new MobileAiTaskFlow(mobileDriver.appiumDriver); 
-                    await mobileTaskFlow.HandleAiTaskMission(taskStep.TaskStep);
+                    await mobileTaskFlow.HandleAiTaskMission(taskStep.TaskStep, apiKey);
                     Console.WriteLine($"Executing task step: {taskStep}");
                 }
             }
@@ -61,7 +63,7 @@ namespace AiCompAutoBe.MobileTest.MobileTest.AiPlay.AiRunFromApi.RunAiFromApi
                 foreach (var step in steps)
                 {
                     var mobileSingleFlow = new MobileAiTaskFlow(mobileDriver.appiumDriver); 
-                    await mobileSingleFlow.TalkWithApp(step.ElementView, step.InputText);
+                    await mobileSingleFlow.TalkWithApp(step.ElementView, step.InputText, apiKey);
                     Console.WriteLine($"Executing click step: {step}");
                 }
             }

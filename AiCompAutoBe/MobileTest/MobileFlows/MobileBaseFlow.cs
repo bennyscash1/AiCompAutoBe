@@ -34,9 +34,10 @@ namespace ComprehensiveAutomation.Test.UiTest.MobileTest.MobileFlows
             return fullPageSource;
         }
         #region Talk with ai by text
-        public async Task TalkWithApp(string elementView, string inputText ="")
+        public async Task TalkWithApp(string elementView, string inputText ="", string apiKey ="")
         {
-            By? element = await GetAiElementLocator(elementView);
+            
+            By? element = await GetAiElementLocator(elementView, apiKey);
             Assert.That(element != null, $"The element for: '{elementView}' was not found by the AI.  ");
 
             if (string.IsNullOrEmpty(inputText))
@@ -52,7 +53,7 @@ namespace ComprehensiveAutomation.Test.UiTest.MobileTest.MobileFlows
 
 
         #region Get ai element for single element
-        private async Task<By?> GetAiElementLocator(string elementView)
+        private async Task<By?> GetAiElementLocator(string elementView, string apiKey ="")
         {
             mobileBasePages.WaitForPageToLoad();
             string fullPageSource = GetFullPageSource();
@@ -68,7 +69,8 @@ namespace ComprehensiveAutomation.Test.UiTest.MobileTest.MobileFlows
                 //Test if the locator is a valid one
                 if (!isLocatorValid)
                 {
-                    locator = await aiService.GetAndroidSingleLocatorFromUserTextInput(fullPageSource, elementView);
+                    locator = await aiService
+                        .GetAndroidSingleLocatorFromUserTextInput(fullPageSource, elementView, apiKey);
                     isLocatorValid = AndroidAiService.isLocatorValid(locator);
                 }
                 if (isLocatorValid)

@@ -317,10 +317,15 @@ namespace SafeCash.Test.ApiTest.Integration.OpenAi
 
         #region Claude ais request
 
-        public async Task<string> GetClaudeResponse(string userPrompts, SystemPromptTypeEnum aiRequest)
+        public async Task<string> GetClaudeResponse(string userPrompts, SystemPromptTypeEnum aiRequest,
+            string apiKey = "")
         {
             string prePrompt = GetSystemPrompt(aiRequest);
-            string apiKey = Environment.GetEnvironmentVariable("CLAUDE_API_KEY");
+            if (string.IsNullOrEmpty(apiKey))
+            {
+                //apiKey = Environment.GetEnvironmentVariable("CLAUDE_API_KEY") ?? throw new InvalidOperationException("API key is missing from environment variables.");
+                throw new InvalidOperationException("API key is missing. Please provide a valid API key for Claude AI.");
+            }
             string url = "https://api.anthropic.com/v1/messages";
             string claudeModel = "claude-3-5-sonnet-20240620";
             var requestBody = new
