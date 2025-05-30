@@ -88,23 +88,7 @@ namespace SafeCash.Test.ApiTest.InternalApiTest.Buyer
             }
         }
 
-        public async Task<bool> IsImagesAreCompareUseAi(string expectedImagePath, string actualImagePath)
-        {
-            OpenAiService openAiService = new OpenAiService();
-            string responseOpenAi = await openAiService.OpenAiServiceRequest(
-                $"image 1: {expectedImagePath} " +
-                $"image 2: {actualImagePath} " ,
-                OpenAiService.SystemPromptTypeEnum.ImagesCompare);
-
-            if (responseOpenAi.Contains("true", StringComparison.OrdinalIgnoreCase))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+    
 
         #region Ai service for API tasks 
         public async Task<string> GetAiResponedTaskAsJson(
@@ -132,7 +116,7 @@ namespace SafeCash.Test.ApiTest.InternalApiTest.Buyer
                         "If the task is already complete, return only { \"type\": 3 }.";
                 }
 
-                lastResponse = await openAiService.GrokRequestService(
+                lastResponse = await openAiService.GetClaudeResponse(
                     userPrompt,
                     OpenAiService.SystemPromptTypeEnum.MobileSystemPromptMissionTask
                 );
@@ -175,7 +159,27 @@ namespace SafeCash.Test.ApiTest.InternalApiTest.Buyer
         }
 
         #endregion
-        public async Task <(string appPackage, string appActivity)> GetAppPackageFromAi(string allAppList, string appName)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   /*     public async Task <(string appPackage, string appActivity)> GetAppPackageFromAi(string allAppList, string appName)
         {
             OpenAiService openAiService = new OpenAiService();
             string appPackageResponceAi = await openAiService.GrokRequestService(
@@ -193,6 +197,23 @@ namespace SafeCash.Test.ApiTest.InternalApiTest.Buyer
             Assert.That(appActivity != null, "appActivity return null");
             return (appPackage, appActivity);
         }
+        public async Task<bool> IsImagesAreCompareUseAi(string expectedImagePath, string actualImagePath)
+        {
+            OpenAiService openAiService = new OpenAiService();
+            string responseOpenAi = await openAiService.OpenAiServiceRequest(
+                $"image 1: {expectedImagePath} " +
+                $"image 2: {actualImagePath} ",
+                OpenAiService.SystemPromptTypeEnum.ImagesCompare);
+
+            if (responseOpenAi.Contains("true", StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }*/
     }
 }
 
