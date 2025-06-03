@@ -15,10 +15,12 @@ namespace AiApiCompAuto.Controllers
         {
             try
             {
+                //It not been used!!!!!
                 var runingService = new CreateRecordingFileViaApi();
                 await runingService.StartRecordingAsync(
                     requestData.RuningApp,
                     requestData.RecordFileName);
+                Console.WriteLine($"The creat file create {requestData.RecordFileName}");
                 return Ok(new
                 {
                     status = "finished",

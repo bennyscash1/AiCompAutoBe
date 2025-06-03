@@ -21,6 +21,7 @@ namespace AiApiCompAuto.Controllers
                 var process = RecordingSessionStore.CurrentRecordingProcess;
                 if (process == null)
                     return BadRequest("No active recording session found.");
+                await Task.Delay(500);
 
                 recordService.StopAdbRecording(process);
 

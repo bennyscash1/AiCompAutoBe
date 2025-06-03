@@ -127,16 +127,19 @@ namespace ComprehensivePlayrightAuto.MobileTest.MobileServices.RecordLocators
         {
             
             bool isDeviceEmulator = MobileEmulatorMenegar.IsRuningDeviceEmulator();
-            if (isDeviceEmulator)
-            {
-                var coordinates = ExtractTouchCoordinatesForEmulator(eventFilePath);
-                return coordinates;
-            }
-            else
-            {
-                var coordinates = ExtractTouchCoordinatesForRealDevice(eventFilePath);
-                return coordinates;
-            }
+            var coordinates = ExtractTouchCoordinatesForRealDevice(eventFilePath);
+            return coordinates;
+            //For now, all device return the same coordinates, so we can use the same method for both real and emulator devices.
+            /*
+                        if (isDeviceEmulator)
+                        {
+                            var coordinates = ExtractTouchCoordinatesForRealDevice(eventFilePath);
+                            return coordinates;
+                        }
+                        else
+                        {
+
+                        }*/
         }
         public static List<(int x, int y)> ExtractTouchCoordinatesForRealDevice(
                                         string eventFilePath)
