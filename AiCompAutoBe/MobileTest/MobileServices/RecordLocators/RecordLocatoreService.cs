@@ -1,9 +1,11 @@
-﻿using ComprehensivePlayrightAuto.MobileTest.InitalMobile.InitialMobileService;
+﻿using AiCompAutoBe.MobileTest.MobileServices;
+using ComprehensivePlayrightAuto.MobileTest.InitalMobile.InitialMobileService;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace ComprehensivePlayrightAuto.MobileTest.MobileServices.RecordLocators
@@ -136,63 +138,45 @@ namespace ComprehensivePlayrightAuto.MobileTest.MobileServices.RecordLocators
                 return coordinates;
             }
         }
-        public static List<(int x, int y)> ExtractTouchCoordinatesForRealDevice(string eventFilePath)
+        public static List<(int x, int y)> ExtractTouchCoordinatesForRealDevice(
+                                        string eventFilePath)
         {
-            var allLines = File.ReadAllLines(eventFilePath).ToList();
-            var screenLine = allLines.FirstOrDefault(l => l.StartsWith("#SCREEN"));
-            if (screenLine == null)
-                throw new Exception("Missing screen size in recording file.");
+            var lines = File.ReadAllLines(eventFilePath);
 
-            allLines.Remove(screenLine);
+            // 1️⃣  physical screen size of the device you will replay on
+            var (screenW, screenH) = GetDevicesSize();
 
-            (int currentWidth, int currentHeight) = GetDevicesSize();
-            var coordinates = new List<(int x, int y)>();
+            // 2️⃣  true raw-axis range
+            var (maxRawX, maxRawY) = GetTouchAxisRange();   // ~16383 on Xiaomi/Redmi
 
-            int? rawX = null, rawY = null;
-            bool touchStarted = false;
-            bool coordinateCaptured = false;
+            var pts = new List<(int x, int y)>();
+            int? rx = null, ry = null;
+            bool finger = false;
 
-            const int maxRawX = 4095;
-            const int maxRawY = 4095;
-
-            foreach (var line in allLines)
+            foreach (var l in lines)
             {
-                if (line.Contains("0039"))
+                if (l.Contains(" 0039 "))            // tracking-ID
+                    finger = !l.Contains("ffffffff"); // up / down
+
+                if (!finger) continue;
+
+                if (l.Contains(" 0035 ")) rx = Convert.ToInt32(l.Split().Last(), 16);
+                if (l.Contains(" 0036 ")) ry = Convert.ToInt32(l.Split().Last(), 16);
+
+                if (rx.HasValue && ry.HasValue)
                 {
-                    if (line.Contains("ffffffff"))
-                    {
-                        touchStarted = false;
-                        coordinateCaptured = false;
-                    }
-                    else
-                    {
-                        touchStarted = true;
-                        coordinateCaptured = false;
-                        rawX = rawY = null;
-                    }
-                }
+                    int px = rx.Value * screenW / maxRawX;
+                    int py = ry.Value * screenH / maxRawY;
+                    pts.Add((px, py));
 
-                if (!touchStarted || coordinateCaptured)
-                    continue;
-
-                if (line.Contains("0035"))
-                    rawX = Convert.ToInt32(line.Trim().Split(' ').Last(), 16);
-
-                if (line.Contains("0036"))
-                    rawY = Convert.ToInt32(line.Trim().Split(' ').Last(), 16);
-
-                if (rawX.HasValue && rawY.HasValue)
-                {
-                    int scaledX = rawX.Value * currentWidth / maxRawX;
-                    int scaledY = rawY.Value * currentHeight / maxRawY;
-                    coordinates.Add((scaledX, scaledY));
-                    rawX = rawY = null;
-                    coordinateCaptured = true; // capture only once per touch
+                    rx = ry = null;                  // one tap per contact
+                    finger = false;
                 }
             }
-
-            return coordinates;
+            return pts;
         }
+
+
 
         public static List<(int x, int y)> ExtractTouchCoordinatesForEmulator(string eventFilePath)
         {
@@ -260,6 +244,29 @@ namespace ComprehensivePlayrightAuto.MobileTest.MobileServices.RecordLocators
             int offsetX = _rand.Next(0, 2); // 0 או 1
             return (x + offsetX, y);        // y נשאר זהה
         }
+
+        private static (int maxX, int maxY) GetTouchAxisRange()
+        {
+            string output = CommandServices.RunAdbCommand("shell getevent -pl");
+
+            int Extract(string axis)
+            {
+                foreach (var line in output.Split('\n'))
+                {
+                    if (!line.Contains(axis, StringComparison.OrdinalIgnoreCase))
+                        continue;
+
+                    // “… max 8640”   or   “… max    19200”
+                    var m = Regex.Match(line, @"max\s+(\d+)");
+                    if (m.Success) return int.Parse(m.Groups[1].Value);
+                }
+                return 4095;   // last-resort fallback
+            }
+
+            return (Extract("ABS_MT_POSITION_X"),   // → 8640
+                    Extract("ABS_MT_POSITION_Y"));  // → 19200
+        }
+
 
 
 
