@@ -33,7 +33,7 @@ namespace AiApiCompAuto.MobileTest.MobileTest.AiPlay
             MobileAiTaskFlow mobileFlow = new MobileAiTaskFlow(mobileDriver.appiumDriver);
 
             //Click on app buttons
-            int aiResponceType = await mobileFlow.HandleAiTaskMission(
+            await mobileFlow.HandleAiTaskMission(
                    "YOur mission is to navigate to the search google page, approve and confirm all buttons till you get to this page.");
             await mobileFlow.TalkWithApp("Click on number 9");
             

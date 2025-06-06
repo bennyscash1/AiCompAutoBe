@@ -24,10 +24,11 @@ namespace AiCompAutoBe.MobileTest.MobileFlows
             mobileDriverLocator = new MobileLoginPage(appiumDriver);
 
         }
-        public async Task<int> HandleAiTaskMission(string userGoalMission, string apiKey="")
+        public async Task<aiResponceTypeEnum> HandleAiTaskMission(string userGoalMission, string apiKey="")
         {
             var aiService = new AndroidAiService();
             int aiResponceType = (int)aiResponceTypeEnum.ButtonLocator;
+            aiResponceTypeEnum enumResponceType = aiResponceTypeEnum.ButtonLocator;
             PreviosLocator = new();
             while (aiResponceType == (int)aiResponceTypeEnum.ButtonLocator ||
                    aiResponceType == (int)aiResponceTypeEnum.InputLocator)
@@ -53,29 +54,31 @@ namespace AiCompAutoBe.MobileTest.MobileFlows
 
                 aiResponceType = GetTypeFromJson(jsonAiResponed);
 
-                if (aiResponceType != (int)aiResponceTypeEnum.ButtonLocator &&
-                    aiResponceType != (int)aiResponceTypeEnum.InputLocator)
-                    break;
+                if (aiResponceType == (int)aiResponceTypeEnum.MissionComplete)
+                    return enumResponceType = aiResponceTypeEnum.MissionComplete;
 
                 string? inputText = aiResponceType == (int)aiResponceTypeEnum.InputLocator
                     ? GetTextInputValuFromJson(jsonAiResponed)
                     : null;
 
                 currentAiLocator = await RetryUntilElementFound(jsonAiResponed, fullPageSource, userGoalMission, aiService);
-
+                
                 if (currentAiLocator == null)
-                    return aiResponceType = (int)aiResponceTypeEnum.AiStuckOrUnsure;
+                    return enumResponceType = aiResponceTypeEnum.AiStuckOrUnsure;
                 if (aiResponceType == (int)aiResponceTypeEnum.ButtonLocator)
                 {
                     mobileDriverLocator.MobileClickElement(currentAiLocator);
+                    enumResponceType = aiResponceTypeEnum.ButtonLocator;
                 }
 
-                else
+                else if(aiResponceType == (int)aiResponceTypeEnum.InputLocator)
                 {
                     mobileDriverLocator.MobileInputTextToField(currentAiLocator, inputText);
+                    enumResponceType = aiResponceTypeEnum.InputLocator;
                 }
+    
             }
-            return aiResponceType;
+            return enumResponceType;
         }
 
         private async Task<By?> RetryUntilElementFound(string jsonResponse, string fullPageSource, string userGoal, AndroidAiService aiService)

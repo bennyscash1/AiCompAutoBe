@@ -36,7 +36,7 @@ namespace AiApiCompAuto.MobileTest.MobileTest.LocalTestRun
             mobileFlow.InitChromeToSearch(true,
                 "https://recaptcha-demo.appspot.com/recaptcha-v2-checkbox.php");
 
-            int aiResponceType = await mobileFlow.HandleAiTaskMission(
+            await mobileFlow.HandleAiTaskMission(
                    "Click on the checbox 'i'm not a robot'");
             await mobileFlow.TalkWithApp("Click on number 9");
 

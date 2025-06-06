@@ -11,10 +11,10 @@ namespace AiApiCompAuto.Infra.McpService
         [Test]
         public void TestMcpTools()
         {
-            var echoResult = McpTools.Echo("Hello World");
+            var echoResult = McpService.Echo("Hello World");
             Console.WriteLine(echoResult); // Should print: Echo: Hello World
 
-            var smokeTestResult = McpTools.RunMobileSmokeTest();
+            var smokeTestResult = McpService.RunMobileSmokeTest();
             Console.WriteLine(smokeTestResult); // Should print: 🔧 Smoke test started on mobile device.
         }
     }

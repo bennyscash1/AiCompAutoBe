@@ -1,4 +1,5 @@
-﻿using AiApiCompAuto.MobileTest.MobileFlows;
+﻿using AiApiCompAuto.Infra.McpService;
+using AiApiCompAuto.MobileTest.MobileFlows;
 using AiCompAutoBe.MobileTest.InitalMobile.InitialMobileService;
 using AiCompAutoBe.MobileTest.MobileFlows;
 using ComprehensiveAutomation.MobileTest.Inital;
@@ -21,22 +22,22 @@ namespace AiApiCompAuto.MobileTest.MobileTest.AiPlay
     public class MobileMcpLocalRun
     {
         static string appRuningName = "calculator";
-        public string deviceId = string.Empty;
 
-        [Test]
-        public async Task _MobileMcpLocalRun()
+        public async Task<string> RunMcpTask(string goal)
         {
-            deviceId = await new InitialDeviceServices()
-           .PrepareTheDeviceToReadyForRun(appRuningName);
+            string deviceId = await new InitialDeviceServices()
+               .PrepareTheDeviceToReadyForRun(appRuningName);
 
             MobileAiDriverFactory mobileDriver = new MobileAiDriverFactory(deviceId, appRuningName);
-            await mobileDriver.InitAndroidAppByAppName(deviceId, appRuningName);
+            //await mobileDriver.InitAndroidAppByAppName(deviceId, appRuningName);
 
-            MobileMcpFlow mobileFlow = new MobileMcpFlow(mobileDriver.appiumDriver);
+            //MobileMcpFlow mobileFlow = new MobileMcpFlow(mobileDriver.appiumDriver);
 
-            await mobileFlow.HendleMcpTaskFlow("Please click on number 1");
+            McpService mcpService = new McpService();
 
+            string mcpRecone =  await mcpService.McpRunMobileFlow (mobileDriver.appiumDriver, goal);
+
+            return mcpRecone;
         }
-
     }
 }

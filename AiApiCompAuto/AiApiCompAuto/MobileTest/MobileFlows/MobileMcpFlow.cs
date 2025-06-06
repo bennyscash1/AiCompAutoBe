@@ -17,17 +17,19 @@ namespace AiApiCompAuto.MobileTest.MobileFlows
 
         }
 
-        public async Task HendleMcpTaskFlow( string userMcpGoal)
+        public async Task <string> HendleMcpTaskFlow( string userMcpGoal)
         {
             string fullPageSource = GetFullPageSource();
-            var mcpService = new McpTools();
+            var mcpService = new McpService();
 
             string responceMcp = 
-                await mcpService.McpRunMobileFlow(appiumDriver, fullPageSource);
+                await mcpService.McpRunMobileFlow(appiumDriver, userMcpGoal);
+
+            return responceMcp;
         }
         public async Task HendlMcpActionFlow(string userMcpGoal)
         {
-            var mcpService = new McpTools();
+            var mcpService = new McpService();
             string responceMcp = await mcpService.McpRunMobileFlow(appiumDriver, userMcpGoal);
             // Process the response as needed
         }
