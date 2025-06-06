@@ -1,4 +1,4 @@
-﻿using ComprehensivePlayrightAuto.MobileTest.MobileTest.AiPlay;
+﻿using AiApiCompAuto.MobileTest.MobileTest.AiPlay;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 

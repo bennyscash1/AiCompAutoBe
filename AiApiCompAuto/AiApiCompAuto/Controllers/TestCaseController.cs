@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AiApiCompAuto.MobileTest.MobileTest.AiPlay;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using ComprehensivePlayrightAuto.MobileTest.MobileTest.AiPlay;
 
 namespace AiApiCompAuto.Controllers
 {

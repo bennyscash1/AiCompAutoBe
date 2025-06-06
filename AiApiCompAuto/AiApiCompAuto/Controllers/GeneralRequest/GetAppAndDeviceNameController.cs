@@ -1,7 +1,6 @@
-﻿using AiCompAutoBe.MobileTest.MobileTest;
-using AiCompAutoBe.MobileTest.MobileTest.AiPlay.AiRunFromApi.RecordingApi;
-using AiCompAutoBe.MobileTest.MobileTest.AiPlay.AiRunFromApi.RunAiFromApi;
-using AiCompAutoBe.MobileTest.MobileTest.GetDeviceAppData;
+﻿using AiApiCompAuto.MobileTest.MobileTest.GetDeviceAppData;
+using AiCompAutoBe.MobileTest.MobileTest;
+
 using Microsoft.AspNetCore.Mvc;
 
 

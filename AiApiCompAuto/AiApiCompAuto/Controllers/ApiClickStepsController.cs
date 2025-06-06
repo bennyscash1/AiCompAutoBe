@@ -1,6 +1,4 @@
-﻿using AiCompAutoBe.MobileTest.MobileTest.AiPlay.AiRunFromApi;
-using AiCompAutoBe.MobileTest.MobileTest.AiPlay.AiRunFromApi.RunAiFromApi;
-using ComprehensivePlayrightAuto.MobileTest.MobileTest.AiPlay;
+﻿using AiApiCompAuto.MobileTest.MobileTest.AiPlay.AiRunFromApi.RunAiFromApi;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 

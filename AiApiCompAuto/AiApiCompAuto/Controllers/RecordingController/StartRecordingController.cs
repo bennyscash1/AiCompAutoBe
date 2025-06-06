@@ -1,13 +1,13 @@
 ﻿using AiCompAutoBe.MobileTest.InitalMobile.InitialMobileService;
 using AiCompAutoBe.MobileTest.MobileFlows;
-using AiCompAutoBe.MobileTest.MobileTest.AiPlay.AiRunFromApi.RecordingApi;
-using AiCompAutoBe.MobileTest.MobileTest.AiPlay.AiRunFromApi.RunAiFromApi;
+
 using AiCompAutoBe.MobileTest.MobileTest.RecordAndPlay;
 using ComprehensiveAutomation.MobileTest.Inital;
 using ComprehensivePlayrightAuto.MobileTest.MobileServices.RecordLocators;
 using Microsoft.AspNetCore.Mvc;
 using static ComprehensivePlayrightAuto.MobileTest.InitalMobile.InitialMobileService.MobileEmulatorMenegar;
 using System.Diagnostics;
+using AiApiCompAuto.MobileTest.MobileTest.AiPlay.AiRunFromApi.RunAiFromApi;
 
 
 namespace AiApiCompAuto.Controllers
