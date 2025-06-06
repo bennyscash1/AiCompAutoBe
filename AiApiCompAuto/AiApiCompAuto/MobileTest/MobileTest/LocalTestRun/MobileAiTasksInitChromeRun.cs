@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 using static AiCompAutoBe.MobileTest.MobileFlows.MobileAiTaskFlow;
 using static ComprehensiveAutomation.Test.Infra.BaseTest.EnumList;
 
-namespace AiApiCompAuto.MobileTest.MobileTest.AiPlay
+namespace AiApiCompAuto.MobileTest.MobileTest.LocalTestRun
 {
     [TestFixture, Category(
         Categories.MobileAndroid),
@@ -33,13 +33,13 @@ namespace AiApiCompAuto.MobileTest.MobileTest.AiPlay
             MobileAiTaskFlow mobileFlow = new MobileAiTaskFlow(mobileDriver.appiumDriver);
 
             //Click on app buttons
-            mobileFlow.InitChromeToSearch(true, 
+            mobileFlow.InitChromeToSearch(true,
                 "https://recaptcha-demo.appspot.com/recaptcha-v2-checkbox.php");
 
             int aiResponceType = await mobileFlow.HandleAiTaskMission(
-                   "Click on the checbox 'i'm not a robot'");      
+                   "Click on the checbox 'i'm not a robot'");
             await mobileFlow.TalkWithApp("Click on number 9");
-            
+
 
         }
 
