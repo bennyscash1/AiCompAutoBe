@@ -1,4 +1,5 @@
-﻿using AiCompAutoBe.MobileTest.InitalMobile.InitialMobileService;
+﻿using AiApiCompAuto.MobileTest.MobileFlows;
+using AiCompAutoBe.MobileTest.InitalMobile.InitialMobileService;
 using AiCompAutoBe.MobileTest.MobileFlows;
 using ComprehensiveAutomation.MobileTest.Inital;
 using ComprehensiveAutomation.Test.UiTest.MobileTest.MobileFlows;
@@ -31,9 +32,9 @@ namespace AiApiCompAuto.MobileTest.MobileTest.AiPlay
             MobileAiDriverFactory mobileDriver = new MobileAiDriverFactory(deviceId, appRuningName);
             await mobileDriver.InitAndroidAppByAppName(deviceId, appRuningName);
 
-            MobileAiTaskFlow mobileFlow = new MobileAiTaskFlow(mobileDriver.appiumDriver);
+            MobileMcpFlow mobileFlow = new MobileMcpFlow(mobileDriver.appiumDriver);
 
-            
+            await mobileFlow.HendleMcpTaskFlow("Please click on number 1");
 
         }
 
