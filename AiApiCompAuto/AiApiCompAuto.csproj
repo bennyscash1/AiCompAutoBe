@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
 	<RuntimeIdentifier>win-x64</RuntimeIdentifier>
 	  <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	  <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,7 +16,9 @@
     <Content Remove="test_result.json" />
   </ItemGroup>
 
-  <ItemGroup>
+
+
+	<ItemGroup>
     <None Include="Infra\EnvFiles\jsonData.dev.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
