@@ -1,6 +1,6 @@
 <<<<<<< HEAD
 Commands:
-
+Teset123
 Allure
 Open cmd on {solutionPath.bin.debug.net6}
 To clean results>:
