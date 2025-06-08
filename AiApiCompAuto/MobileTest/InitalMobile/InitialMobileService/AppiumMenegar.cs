@@ -38,6 +38,7 @@ namespace ComprehensivePlayrightAuto.MobileTest.InitalMobile.InitialMobileServic
                 return;
             }
             string appiumPath = GetAppiumCmdPath();
+            Console.WriteLine($"Appium path install: {appiumPath}");
             string appiumArg = $"--address 127.0.0.1 --port {MobileAiDriverFactory.appiumPort}";
             if (!File.Exists(appiumPath))
                 throw new FileNotFoundException("Appium path not being found: " + appiumPath);
@@ -88,12 +89,13 @@ namespace ComprehensivePlayrightAuto.MobileTest.InitalMobile.InitialMobileServic
             while (dir != null && dir.Exists)
             {
                 string potential = Path.Combine(dir.FullName, "MobileTools", "AppiumService", "appium.cmd");
+                Console.WriteLine( $"Search appium file on {potential}");
                 if (File.Exists(potential))
                     return potential;
 
                 dir = dir.Parent;
             }
-
+            Console.WriteLine("Appium folder not being found, make sure the folder exsist");
             throw new FileNotFoundException("appium.cmd not found by recursive search.");
         }
         
