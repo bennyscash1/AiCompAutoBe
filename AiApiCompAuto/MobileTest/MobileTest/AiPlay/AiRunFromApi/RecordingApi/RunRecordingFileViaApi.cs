@@ -34,6 +34,7 @@ namespace AiApiCompAuto.MobileTest.MobileTest.AiPlay.AiRunFromApi.RecordingApi
             #region Get recording into file
             string recordFilePath = RecordLocatoreService
                 .GetRecordFileFullPath(recordingFileName);
+            Console.WriteLine( "Record file path: " + recordFilePath);
             await mobileFlow.ClickOnXyUsingFile(recordFilePath);
             #endregion
         }

@@ -1,4 +1,4 @@
-﻿using AiApiCompAuto.MobileTest.MobileTest.AiPlay.AiRunFromApi.RecordingApi;
+﻿/*using AiApiCompAuto.MobileTest.MobileTest.AiPlay.AiRunFromApi.RecordingApi;
 using AiApiCompAuto.MobileTest.MobileTest.AiPlay.AiRunFromApi.RunAiFromApi;
 
 using Microsoft.AspNetCore.Mvc;
@@ -39,3 +39,4 @@ namespace AiApiCompAuto.Controllers
         }
     }
 }
+*/

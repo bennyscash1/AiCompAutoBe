@@ -24,13 +24,13 @@ namespace AiApiCompAuto.Controllers
                 string deviceId = await new InitialDeviceServices()
                   .PrepareTheDeviceToReadyForRun(requestData.RuningApp,
                   EmulatorEnumList.Small_Phone_API_35.ToString());
-
+                Console.WriteLine("Device create id: " + deviceId);
                 MobileAiDriverFactory mobileDriver = new MobileAiDriverFactory(deviceId, requestData.RuningApp);
                 MobileAiTaskFlow mobileFlow = new MobileAiTaskFlow(mobileDriver.appiumDriver);
 
                 var recordService = new RecordLocatoreService();
                 string file = recordService.CreateRecordFile(requestData.RecordFileName);
-
+                Console.WriteLine("File record was create :" + file);
                 Process recordingProcess = recordService
                     .StartAdbRecordingToFile(file);
 
