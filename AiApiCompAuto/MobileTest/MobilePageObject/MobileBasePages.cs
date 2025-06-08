@@ -1,9 +1,7 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.Android;
-using OpenQA.Selenium.Appium.MultiTouch;
 using OpenQA.Selenium.Support.UI;
-using SeleniumExtras.WaitHelpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;

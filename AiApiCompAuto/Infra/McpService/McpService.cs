@@ -1,9 +1,6 @@
 ﻿using AiApiCompAuto.MobileTest.MobileFlows;
 using AiCompAutoBe.MobileTest.MobileFlows;
 using ModelContextProtocol.Server;
-using Newtonsoft.Json;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.Android;
 using SafeCash.Test.ApiTest.InternalApiTest.Buyer;
 using System.ComponentModel;

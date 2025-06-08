@@ -2,17 +2,16 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Support.UI;
-using SeleniumExtras.WaitHelpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
-using Microsoft.Playwright;
 using NUnit.Framework;
 using System.Threading.Tasks;
 using System.Drawing;
+using Microsoft.Playwright;
 
 namespace AiApiCompAuto.UiTest.BaseData
 {

@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using ComprehensiveAutomation.MobileTest.Inital;
 using static ComprehensiveAutomation.Test.Infra.BaseTest.EnumList;
 using NUnit.Framework;
-using OpenQA.Selenium.DevTools.V117.Runtime;
 using ComprehensivePlayrightAuto.MobileTest.InitalMobile.InitialMobileService;
 using AiCompAutoBe.MobileTest.InitalMobile.InitialMobileService;
 

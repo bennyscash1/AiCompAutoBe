@@ -4,7 +4,6 @@ using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium.Android;
 using OpenQA.Selenium.Appium.Mac;
-using OpenQA.Selenium.DevTools.V117.Security;
 using SafeCash.Test.ApiTest.InternalApiTest.Buyer;
 using System;
 using System.Collections.Generic;

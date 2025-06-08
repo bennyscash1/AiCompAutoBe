@@ -1,7 +1,4 @@
-﻿using CsvHelper;
-using CsvHelper.Configuration;
-using CsvHelper.Configuration.Attributes;
-using Newtonsoft.Json.Linq;
+﻿
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,8 +12,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using static ComprehensiveAutomation.Test.Infra.BaseTest.EnumList;
-using OpenQA.Selenium.Appium.Mac;
-using OpenQA.Selenium;
+
 
 namespace ComprehensiveAutomation.Test.Infra.BaseTest
 {

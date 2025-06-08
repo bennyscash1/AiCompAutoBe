@@ -1,8 +1,6 @@
 ﻿using OpenQA.Selenium.Appium.Android;
-using OpenQA.Selenium.Appium.MultiTouch;
 using OpenQA.Selenium.Support.UI;
 using OpenQA.Selenium;
-using SeleniumExtras.WaitHelpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +9,10 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using OpenQA.Selenium.Interactions;
 using System.Diagnostics;
+
+
+using System.Diagnostics;
+using SeleniumExtras.WaitHelpers;
 
 namespace ComprehensiveAutomation.MobileTest.InitalMobile
 {
@@ -33,7 +35,7 @@ namespace ComprehensiveAutomation.MobileTest.InitalMobile
             bool isElementFound = false;
             try
             {
-                wait.Until(ExpectedConditions.ElementToBeClickable(el));
+                object value = wait.Until(ExpectedConditions.ElementToBeClickable(el));
                 isElementFound = true;
             }
             catch (WebDriverTimeoutException e)
@@ -202,18 +204,9 @@ namespace ComprehensiveAutomation.MobileTest.InitalMobile
         {
             appiumDriver.OpenNotifications();
         }
-        public void CloseStatusBar()
-        {
 
-            var screenWidth = appiumDriver.Manage().Window.Size.Width;
-            var screenHeight = appiumDriver.Manage().Window.Size.Height;
 
-            var touchAction = new TouchAction(appiumDriver);
-            touchAction.Press(screenWidth / 2, screenHeight - 10).Release().Perform();
-
-        }
-
-        public MobileBaseFunction ScrollDown()
+ /*       public MobileBaseFunction ScrollDown()
         {
             Thread.Sleep(1000);
             int startX = 500; // X coordinate to start the swipe
@@ -223,7 +216,7 @@ namespace ComprehensiveAutomation.MobileTest.InitalMobile
             TouchAction touchAction = new TouchAction(appiumChromeDriver);
             touchAction.Press(startX, startY).Wait(1000).MoveTo(endX, endY).Release().Perform();
             return this;
-        }
+        }*/
  
         #region X and y 
         public void MobileClickLocatorXy(int x, int y)
