@@ -11,3 +11,5 @@ TestResults/
 # Ignore local mobile tools (Appium/Emulator)
 **/MobileTools/
 **/RecordLocators/LocatorsFiles/
+# Ignore release output
+dist/

@@ -1,5 +1,8 @@
 var builder = WebApplication.CreateBuilder(args);
 
+// קובע פורט קבוע לכל הרצה: גם ב־dotnet run וגם בקובץ EXE
+builder.WebHost.UseUrls("http://localhost:7012");
+
 builder.Services.AddControllers();
 builder.Services.AddCors(options =>
 {
@@ -20,7 +23,11 @@ builder.Services
 var app = builder.Build();
 
 app.UseCors();
-app.UseHttpsRedirection();
+
+// אפשר להשאיר אם לא עושה redirect ל-HTTPS
+// או למחוק כדי להימנע מבלבול אם אין תעודת SSL
+// app.UseHttpsRedirection();
+
 app.UseAuthorization();
 app.MapControllers();
 
