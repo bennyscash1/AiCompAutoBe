@@ -349,7 +349,7 @@ namespace SafeCash.Test.ApiTest.Integration.OpenAi
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new InvalidOperationException($"API key is incorrect (Anthropic return http status {response.StatusCode},  {responseContent}). " +
+                throw new InvalidOperationException($"API key '{apiKey}' is incorrect (Anthropic return http status {response.StatusCode},  {responseContent}). " +
                     $"Please provide a valid API key for Claude AI.");
                 //return $"Error: {response.StatusCode}\n{responseContent}";
             }

@@ -1,6 +1,6 @@
 <<<<<<< HEAD
 Commands:
-Teset123
+
 Allure
 Open cmd on {solutionPath.bin.debug.net6}
 To clean results>:
@@ -54,3 +54,9 @@ The API is designed for easy customization. Modify the test scripts, configurati
 Contributing
 Contributions are welcome! Feel free to submit issues, feature requests, or pull requests to enhance the Automation API.
 >>>>>>> 0715927a1426d88c92e8d607c469d2bf95435c39
+
+
+
+--Release Notes--
+Publish
+dotnet publish -c Release -o dist --self-contained false
