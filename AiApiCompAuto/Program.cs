@@ -1,7 +1,7 @@
 var builder = WebApplication.CreateBuilder(args);
 
 // קובע פורט קבוע לכל הרצה: גם ב־dotnet run וגם בקובץ EXE
-builder.WebHost.UseUrls("http://localhost:7012");
+builder.WebHost.UseUrls("https://localhost:7012");
 
 builder.Services.AddControllers();
 builder.Services.AddCors(options =>
