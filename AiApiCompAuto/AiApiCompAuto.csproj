@@ -57,6 +57,7 @@
 
   <ItemGroup>
     <Folder Include="dist\MobileTest\MobileServices\RecordLocators\LocatorsFiles\" />
+    <Folder Include="certs\" />
   </ItemGroup>
 
 </Project>
