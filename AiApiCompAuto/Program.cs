@@ -1,17 +1,9 @@
 var builder = WebApplication.CreateBuilder(args);
 
-// בודק אם אנחנו בסביבת פיתוח או בענן
 if (builder.Environment.IsDevelopment())
-{
-    // HTTPS מקומי
     builder.WebHost.UseUrls("https://localhost:7012");
-}
 else
-{
-    // Azure מחייב HTTP על פורט 8080
-    var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
-    builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
-}
+    builder.WebHost.UseUrls($"http://0.0.0.0:{Environment.GetEnvironmentVariable("PORT") ?? "8080"}");
 
 builder.Services.AddControllers();
 
@@ -26,15 +18,19 @@ builder.Services.AddCors(options =>
     });
 });
 
-// MCP
-builder.Services
-    .AddMcpServer()
-    .WithStdioServerTransport()
-    .WithToolsFromAssembly();
+// ?? הסר זמנית את MCP
+// builder.Services
+//     .AddMcpServer()
+//     .WithStdioServerTransport()
+//     .WithToolsFromAssembly();
 
 var app = builder.Build();
 
 app.UseCors();
 app.UseAuthorization();
 app.MapControllers();
+
+// דף לבדיקה
+app.MapGet("/", () => "API is running");
+
 app.Run();
