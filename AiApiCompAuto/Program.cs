@@ -1,7 +1,7 @@
 var builder = WebApplication.CreateBuilder(args);
 
-//builder.WebHost.UseUrls("https://localhost:7012");
-builder.WebHost.UseUrls("https://0.0.0.0:7012");
+var port = Environment.GetEnvironmentVariable("PORT") ?? "7012";
+builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
 
 builder.Services.AddControllers();
 
@@ -10,10 +10,10 @@ builder.Services.AddCors(options =>
     options.AddDefaultPolicy(policy =>
     {
         policy
-             .SetIsOriginAllowed(_ => true)
-             .AllowAnyHeader()
-             .AllowAnyMethod();
-            });
+            .SetIsOriginAllowed(_ => true)
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
 });
 
 // MCP
